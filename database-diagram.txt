@@ -1,16 +1,19 @@
 // Use DBML to define your database structure
 // Docs: https://dbml.dbdiagram.io/docs
 
+// === Users ===
 Table users {
   id integer [primary key]
   username varchar
   email varchar
   password varchar
   role varchar [note: 'guest, user, admin']
+  language_id integer [note: 'Preferred UI language']
   created_at timestamp
   updated_at timestamp
 }
 
+// === Files ===
 Table files {
   id integer [primary key]
   filename varchar
@@ -18,11 +21,12 @@ Table files {
   description text
   owner_id integer [not null]
   is_public boolean
-  password_hash varchar [note: 'Hashed encryption password']
+  password_hash varchar [note: 'Hashed encryption password for validation']
   created_at timestamp
   updated_at timestamp
 }
 
+// === File Access ===
 Table file_access {
   id integer [primary key]
   file_id integer [not null]
@@ -31,6 +35,7 @@ Table file_access {
   created_at timestamp
 }
 
+// === Logs ===
 Table logs {
   id integer [primary key]
   file_id integer [not null]
@@ -40,10 +45,61 @@ Table logs {
   date timestamp
 }
 
-Ref: files.owner_id > users.id
+// === Comments ===
+Table comments {
+  id integer [primary key]
+  file_id integer [not null]
+  user_id integer [not null]
+  content text
+  created_at timestamp
+}
 
+// === Friends (confirmed connections) ===
+Table friends {
+  id integer [primary key]
+  user_id integer
+  friend_id integer
+  created_at timestamp
+}
+
+// === Friend Requests (pending) ===
+Table friend_requests {
+  id integer [primary key]
+  sender_id integer
+  receiver_id integer
+  status varchar [note: 'pending, accepted, declined']
+  created_at timestamp
+}
+
+// === Supported Languages ===
+Table languages {
+  id integer [primary key]
+  name varchar
+  code varchar [note: 'e.g., en, lv, de, etc.']
+}
+
+// === Homepage Personalization Settings ===
+Table homepage_settings {
+  id integer [primary key]
+  user_id integer
+  show_recent_files boolean
+  show_friend_activity boolean
+  theme varchar [note: 'light, dark, etc.']
+  layout varchar [note: 'grid, list, compact']
+  updated_at timestamp
+}
+
+// === Relationships ===
+Ref: files.owner_id > users.id
 Ref: file_access.file_id > files.id
 Ref: file_access.user_id > users.id
-
 Ref: logs.file_id > files.id
 Ref: logs.user_id > users.id
+Ref: users.language_id > languages.id
+Ref: homepage_settings.user_id > users.id
+Ref: comments.user_id > users.id
+Ref: comments.file_id > files.id
+Ref: friends.user_id > users.id
+Ref: friends.friend_id > users.id
+Ref: friend_requests.sender_id > users.id
+Ref: friend_requests.receiver_id > users.id
