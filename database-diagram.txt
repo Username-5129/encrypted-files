@@ -1,0 +1,49 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table users {
+  id integer [primary key]
+  username varchar
+  email varchar
+  password varchar
+  role varchar [note: 'guest, user, admin']
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table files {
+  id integer [primary key]
+  filename varchar
+  stored_path varchar [note: 'Encrypted file storage path']
+  description text
+  owner_id integer [not null]
+  is_public boolean
+  password_hash varchar [note: 'Hashed encryption password']
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table file_access {
+  id integer [primary key]
+  file_id integer [not null]
+  user_id integer [not null]
+  can_edit boolean
+  created_at timestamp
+}
+
+Table logs {
+  id integer [primary key]
+  file_id integer [not null]
+  user_id integer [note: 'Nullable for guest']
+  ip_address varchar
+  action varchar [note: 'download, edit, delete, share, etc.']
+  date timestamp
+}
+
+Ref: files.owner_id > users.id
+
+Ref: file_access.file_id > files.id
+Ref: file_access.user_id > users.id
+
+Ref: logs.file_id > files.id
+Ref: logs.user_id > users.id
