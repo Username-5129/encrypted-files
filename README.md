@@ -19,7 +19,7 @@ log in as root mysql:
 sudo mysql
 
 create database and user with privileges:
-`CREATE DATABASE fec;
+CREATE DATABASE fec;
 CREATE USER 'fec_user'@'localhost' IDENTIFIED BY 'fec_database_password';
 GRANT ALL PRIVILEGES ON fec.* TO 'fec_user'@'localhost';
-FLUSH PRIVILEGES;`
+FLUSH PRIVILEGES;
