@@ -5,7 +5,8 @@ Practical assignment for Web Technologies
 
 # start ddev
 ddev start
-
+ddev phpmyadmin
+composer install
 
 
 
