@@ -3,6 +3,24 @@ Practical assignment for Web Technologies
 
 ### setup
 
+# start ddev
+ddev start
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # install laravel, composer and php:
 
 /bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.4)"
