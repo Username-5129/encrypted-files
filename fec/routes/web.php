@@ -7,7 +7,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\EncryptedFilesController;
 use App\Http\Controllers\AuthController;
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
 Route::get('/dashboard', function () {
@@ -23,6 +23,5 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 
-Route::get('/about', [AboutController::class, 'index']);
-Route::get('/files', [EncryptedFilesController::class, 'index']);
-Route::get('/login1', [AuthController::class, 'index']);
+Route::get('/about', [AboutController::class, 'index'])->name('about');
+Route::get('/files', [EncryptedFilesController::class, 'index'])->name('files');

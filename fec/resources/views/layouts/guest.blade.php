@@ -15,6 +15,12 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased">
+        <nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 p-4">
+            <a href="{{ route('home') }}" class="text-gray-800 dark:text-gray-200 font-bold mr-4">Home</a>
+            <a href="{{ route('about') }}" class="text-gray-800 dark:text-gray-200 font-bold mr-4">About</a>
+            <a href="{{ route('login') }}" class="text-gray-800 dark:text-gray-200 font-bold">Login</a>
+        </nav>
+
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
             <div>
                 <a href="/">
