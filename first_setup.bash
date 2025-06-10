@@ -1,6 +1,5 @@
 cd fec
 ddev start
-ddev phpmyadmin
 sudo apt install -y composer
 ddev composer install
 
