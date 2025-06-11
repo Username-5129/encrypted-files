@@ -8,7 +8,7 @@ ddev start
 ddev phpmyadmin
 composer install
 
-
+ddev npm run dev
 
 
 
