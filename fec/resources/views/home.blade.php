@@ -1,7 +1,6 @@
-@extends('layouts.base')
-
-@section('title', 'Homepage')
-
-@section('content')
+<x-layout>
+    <x-slot name="title">
+        Home
+    </x-slot>
     <h1>Welcome to the Homepage!</h1>
-@endsection
+</x-layout>
