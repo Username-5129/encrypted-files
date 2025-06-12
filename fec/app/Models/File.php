@@ -6,8 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class File extends Model
 {
-    public function __construct()
+    protected $fillable = [
+        'filename',
+        'stored_path',
+        'description',
+        'owner_id',
+        'is_public',
+        'password_hash',
+    ];
+
+    // public function __construct()
+    // {
+    //     $this->middleware('auth')->except(['encrypted_files.index', 'show']);
+    // }
+
+    public function user()
     {
-    $this->middleware('auth')->except(['encrypted_files.index', 'show']);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

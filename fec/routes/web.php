@@ -6,7 +6,6 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\EncryptedFilesController;
 use App\Http\Controllers\AuthController;
 
-
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware('guest')->group(function () {
@@ -19,4 +18,6 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 Route::get('/about', [AboutController::class, 'index'])->name('about');
+
+Route::resource('file', EncryptedFilesController::class);
 Route::get('/files', [EncryptedFilesController::class, 'index'])->name('files.index');

@@ -6,6 +6,8 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+use App\Models\File;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -26,6 +28,15 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@a.a',
             'password' => bcrypt('admin'),
             'role' => 'admin'
+        ]);
+
+        $file1 = File::create([
+            'filename' => 'fails1',
+            'stored_path' => '/somerandom/filepath/file3253232',
+            'description' => 'Hello there, this is a sample description.',
+            'owner_id' => 1,
+            'is_public' => true,
+            'password_hash' => 'temp'
         ]);
     }
 }
