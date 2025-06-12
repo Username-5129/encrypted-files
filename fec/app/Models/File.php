@@ -22,6 +22,21 @@ class File extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comments::class, 'file_id');
+    }
+
+    public function logs()
+    {
+        return $this->hasMany(Logs::class, 'file_id');
+    }
+
+    public function file_access()
+    {
+        return $this->hasMany(FileAccess::class, 'file_id');
     }
 }
