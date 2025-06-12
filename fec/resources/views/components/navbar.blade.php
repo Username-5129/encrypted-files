@@ -7,6 +7,11 @@
         <a href="{{ route('files.index') }}">Files</a>
       </li>
       @auth
+        @can('create', App\Models\File::class)
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('file.create') }}">Create file</a>
+          </li>
+        @endcan
         <li>
           <form action="{{ route('logout') }}" method="POST">
             @csrf
