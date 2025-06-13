@@ -12,11 +12,22 @@ class EncryptedFilesController extends Controller
 {
     public function index()
     {
-        $files = File::all()->filter(function ($file) {
-            return auth()->user()->can('view', $file);
-        });
+        $files = File::all();
+
+        if (auth()->check()) {
+            $files = $files->filter(function ($file) {
+                return auth()->user()->can('view', $file);
+            });
+        } else {
+            $files = $files->filter(function ($file) {
+                return $file->is_public;
+            });
+        }
+
+        // Return the view with the filtered files
         return view('encrypted_files.index', compact('files'));
     }
+
 
     public function create(Request $request) {
         if ($request->user()->cannot('create', File::class)) {
@@ -56,22 +67,38 @@ class EncryptedFilesController extends Controller
     public function show(string $id)
     {
         $file = File::findOrFail($id);
-        if (auth()->user()->cannot('view', $file)) {
-            abort(403, 'Unauthorized to view this file.');
+
+        if (auth()->check()) {
+            if (auth()->user()->cannot('view', $file)) {
+                abort(403, 'Unauthorized to view this file.');
+            }
+        } else {
+            if (!$file->is_public) {
+                abort(403, 'Unauthorized to view this file.');
+            }
         }
+
         return view('encrypted_files.show', compact('file'));
     }
 
+
     public function download(File $file)
     {
-        // Optional: Add authorization if needed
-        if (auth()->user()->cannot('view', $file)) {
-            abort(403, 'Unauthorized to download this file.');
+        if (auth()->check()) {
+            if (auth()->user()->cannot('view', $file)) {
+                abort(403, 'Unauthorized to download this file.');
+            }
+        } else {
+            if (!$file->is_public) {
+                abort(403, 'Unauthorized to download this file.');
+            }
         }
+
         if (!Storage::exists($file->stored_path)) {
             abort(404, 'File not found.');
         }
-        // Return the file as a download response with original filename
+
         return Storage::download($file->stored_path, $file->filename);
     }
+
 }
