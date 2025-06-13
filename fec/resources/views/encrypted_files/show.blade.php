@@ -12,5 +12,10 @@
 
     <hr>
 
+    <a href="{{ route('files.download', $file) }}" class="" 
+        label="Download {{ $file->filename }}">
+        Download File
+    </a>
+
 
 </x-layout>

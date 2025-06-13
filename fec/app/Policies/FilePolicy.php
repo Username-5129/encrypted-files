@@ -21,7 +21,7 @@ class FilePolicy
      */
     public function view(User $user, File $file): bool
     {
-        return false;
+        return $user->id === $file->owner_id || $file->is_public;
     }
 
     /**

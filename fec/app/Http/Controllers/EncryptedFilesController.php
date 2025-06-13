@@ -12,13 +12,15 @@ class EncryptedFilesController extends Controller
 {
     public function index()
     {
-        $files = File::all();
+        $files = File::all()->filter(function ($file) {
+            return auth()->user()->can('view', $file);
+        });
         return view('encrypted_files.index', compact('files'));
     }
 
     public function create(Request $request) {
         if ($request->user()->cannot('create', File::class)) {
-            abort(403, 'You are not authorized to create a job file.');
+            abort(403, 'You are not authorized to create a file.');
         }
         
         return view('encrypted_files.create');
@@ -26,7 +28,7 @@ class EncryptedFilesController extends Controller
 
     public function store(Request $request) {
         if ($request->user()->cannot('create', File::class)) {
-            abort(403, 'You are not authorized to create a job file.');
+            abort(403, 'You are not authorized to create a file.');
         }
 
         $request->validate([
@@ -51,11 +53,25 @@ class EncryptedFilesController extends Controller
         return redirect()->route('files.index')->with('success', 'File created successfully!');
     }
 
-
     public function show(string $id)
     {
         $file = File::findOrFail($id);
+        if (auth()->user()->cannot('view', $file)) {
+            abort(403, 'Unauthorized to view this file.');
+        }
         return view('encrypted_files.show', compact('file'));
     }
 
+    public function download(File $file)
+    {
+        // Optional: Add authorization if needed
+        if (auth()->user()->cannot('view', $file)) {
+            abort(403, 'Unauthorized to download this file.');
+        }
+        if (!Storage::exists($file->stored_path)) {
+            abort(404, 'File not found.');
+        }
+        // Return the file as a download response with original filename
+        return Storage::download($file->stored_path, $file->filename);
+    }
 }

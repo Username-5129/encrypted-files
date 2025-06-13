@@ -21,3 +21,5 @@ Route::get('/about', [AboutController::class, 'index'])->name('about');
 
 Route::resource('file', EncryptedFilesController::class);
 Route::get('/files', [EncryptedFilesController::class, 'index'])->name('files.index');
+Route::get('/files/{file}/download', [EncryptedFilesController::class, 'download'])->name('files.download');
+
