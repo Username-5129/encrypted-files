@@ -37,32 +37,38 @@ class EncryptedFilesController extends Controller
         return view('encrypted_files.create');
     }
 
-    public function store(Request $request) {
-        if ($request->user()->cannot('create', File::class)) {
-            abort(403, 'You are not authorized to create a file.');
+    public function store(Request $request)
+    {
+        // Validate the incoming request data
+        $request->validate([
+            'filename' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'is_public' => 'required|boolean',
+            'password_hash' => 'required|string',
+            'stored_path' => 'required|file',
+        ]);
+
+        // Handle the file upload
+        $uploadedFile = $request->file('stored_path');
+        $storedPath = $uploadedFile->store('files');
+
+        $filename = $request->input('filename');
+        if (empty($filename)) {
+            $filename = $uploadedFile->getClientOriginalName();
         }
 
-        $request->validate([
-            'filename' => 'required|string|max:255',
-            'description' => 'required|string',
-            'is_public' => 'required|boolean',
-            'stored_path' =>'required|file',
-            'password_hash' => 'required|string|max:255',
-        ]);
-
-        $request->stored_path = $request->file('stored_path')->store('stored_path');
-
         File::create([
-            'filename' => $request->filename,
-            'stored_path' =>$request->stored_path,
+            'filename' => $filename,
             'description' => $request->description,
-            'is_public' => (bool)$request->is_public,
-            'owner_id' => Auth::id(),
+            'is_public' => $request->is_public,
             'password_hash' => $request->password_hash,
+            'owner_id' => Auth::id(),
+            'stored_path' => $storedPath,
         ]);
 
-        return redirect()->route('files.index')->with('success', 'File created successfully!');
+        return redirect()->route('file.index')->with('success', 'File created successfully.');
     }
+
 
     public function show(string $id)
     {

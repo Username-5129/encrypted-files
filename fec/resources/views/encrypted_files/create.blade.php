@@ -18,7 +18,7 @@
 
         <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700">Filename</label>
-            <input type="text" name="filename" value="{{ old('filename') }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" required>
+            <input type="text" placeholder="Leave this empty to save the original filename" name="filename" value="{{ old('filename') }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">
         </div>
 
         <div class="mb-4">
