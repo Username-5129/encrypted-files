@@ -44,8 +44,11 @@ class EncryptedFilesController extends Controller
             'filename' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'is_public' => 'required|boolean',
-            'password_hash' => 'required|string',
+            'password_hash' => 'required|string|min:8|regex:/[0-9]/',
             'stored_path' => 'required|file',
+        ], [
+            'password_hash.regex' => 'The password must contain at least one number.',
+            'password_hash.min' => 'The password must be at least 8 characters long.',
         ]);
 
         // Handle the file upload
