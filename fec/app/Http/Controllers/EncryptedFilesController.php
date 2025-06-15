@@ -41,7 +41,6 @@ class EncryptedFilesController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the incoming request data
         $request->validate([
             'filename' => 'nullable|string|max:255',
             'description' => 'nullable|string',
@@ -52,34 +51,45 @@ class EncryptedFilesController extends Controller
             'password_hash.regex' => 'The password must contain at least one number.',
             'password_hash.min' => 'The password must be at least 8 characters long.',
         ]);
-
-        // Handle the file upload
         $uploadedFile = $request->file('stored_path');
-
         $fileContent = file_get_contents($uploadedFile->getRealPath());
+        $password = $request->password_hash;
 
-        $encryptedContent = encrypt($fileContent, false, $request->password_hash);
+        // Generate random salt and IV
+        $salt = random_bytes(16);
+        $ivLength = openssl_cipher_iv_length('aes-256-cbc');
+        $iv = random_bytes($ivLength);
 
-        $storedPath = 'files/' . $uploadedFile->hashName();
-        Storage::put($storedPath, $encryptedContent);
+        // Derive key from password and salt using PBKDF2 (recommended iterations)
+        $key = hash_pbkdf2('sha256', $password, $salt, 100000, 32, true);
 
-        $filename = $request->input('filename');
-        if (empty($filename)) {
-            $filename = $uploadedFile->getClientOriginalName();
+        // Encrypt file content
+        $encrypted = openssl_encrypt($fileContent, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
+        if ($encrypted === false) {
+            return back()->withErrors(['stored_path' => 'File encryption failed.']);
         }
 
-        $password_hash = Hash::make($request->password_hash);
+        // Store salt + IV + encrypted data together
+        $encryptedData = $salt . $iv . $encrypted;
 
+        // Store encrypted file
+        $storedFilename = $uploadedFile->hashName();
+        $storedPath = 'files/' . $storedFilename;
+        Storage::put($storedPath, $encryptedData);
+
+        // Use password hash securely for authentication, not encryption key
+        $passwordHash = Hash::make($password);
+
+        $filename = $request->input('filename') ?: $uploadedFile->getClientOriginalName();
         File::create([
             'filename' => $filename,
             'description' => $request->description,
             'is_public' => $request->is_public,
-            'password_hash' => $password_hash,
-            'owner_id' => Auth::id(),
+            'password_hash' => $passwordHash,
+            'owner_id' => auth()->id(),
             'stored_path' => $storedPath,
         ]);
-
-        return redirect()->route('file.index')->with('success', 'File created successfully.');
+        return redirect()->route('file.index')->with('success', 'File encrypted and stored successfully.');
     }
 
 
@@ -125,16 +135,34 @@ class EncryptedFilesController extends Controller
         $request->validate([
             'password' => 'required|string',
         ]);
-
-        // Check if the provided password matches the stored hash
         if (!Hash::check($request->password, $file->password_hash)) {
             return back()->withErrors(['password' => 'The provided password is incorrect.']);
         }
 
-        // If the password is correct, proceed to download the file
-        return $this->download($file);
-    }
+        // User password is correct, prepare to decrypt and download
+        $encryptedData = Storage::get($file->stored_path);
 
+        // Extract salt + iv + encrypted content
+        $salt = substr($encryptedData, 0, 16);
+        $ivLength = openssl_cipher_iv_length('aes-256-cbc');
+        $iv = substr($encryptedData, 16, $ivLength);
+        $encryptedContent = substr($encryptedData, 16 + $ivLength);
+
+        // Derive key same way as in encryption
+        $key = hash_pbkdf2('sha256', $request->password, $salt, 100000, 32, true);
+
+        // Decrypt content
+        $decrypted = openssl_decrypt($encryptedContent, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
+        if ($decrypted === false) {
+            return back()->withErrors(['password' => 'Failed to decrypt file with the given password.']);
+        }
+
+        // Create temp file
+        $tempFilePath = tempnam(sys_get_temp_dir(), 'decfile_');
+        file_put_contents($tempFilePath, $decrypted);
+        
+        return response()->download($tempFilePath, $file->filename)->deleteFileAfterSend(true);
+    }
 
     public function edit(Request $request, string $id)
     {
