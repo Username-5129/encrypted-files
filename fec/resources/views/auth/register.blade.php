@@ -2,63 +2,63 @@
     <x-slot name="title">
         Register
     </x-slot>
-        <h1>Register</h1>
-
-    <form action="{{ route('register') }}" method="POST">
-        @csrf
-        <div class="mb-3">
-            <label for="name" class="form-label">Full Name</label>
-            <input
-                type="text"
-                name="name"
-                class="form-control"
-                required
-                value="{{ old('name') }}"
-            >
-            @error('name')
-                <small class="text-danger">{{ $message }}</small>
-            @enderror
+    <div class="flex items-center justify-center min-h-screen bg-gray-50">
+        <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+            <h1 class="text-2xl font-bold mb-6 text-center">Register</h1>
+            <form action="{{ route('register') }}" method="POST" class="space-y-5">
+                @csrf
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                    <input
+                        type="text"
+                        name="name"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-800"
+                        required
+                        value="{{ old('name') }}"
+                    >
+                    @error('name')
+                        <small class="text-red-500">{{ $message }}</small>
+                    @enderror
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+                    <input
+                        type="email"
+                        name="email"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-800"
+                        required
+                        value="{{ old('email') }}"
+                    >
+                    @error('email')
+                        <small class="text-red-500">{{ $message }}</small>
+                    @enderror
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-800"
+                        required
+                    >
+                    @error('password')
+                        <small class="text-red-500">{{ $message }}</small>
+                    @enderror
+                </div>
+                <div>
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Password confirmation</label>
+                    <input
+                        type="password"
+                        name="password_confirmation"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-800"
+                        required
+                    >
+                    @error('password_confirmation')
+                        <small class="text-red-500">{{ $message }}</small>
+                    @enderror
+                </div>
+                <button type="submit" class="w-full py-2 px-4 bg-green-800 text-white font-semibold rounded-2xl shadow-md hover:bg-green-900 transition">Register</button>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email address</label>
-            <input
-                type="email"
-                name="email"
-                class="form-control"
-                required
-                value="{{ old('email') }}"
-            >
-            @error('email')
-                <small class="text-danger">{{ $message }}</small>
-            @enderror
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input
-                type="password"
-                name="password"
-                class="form-control"
-                required
-                value=""
-            >
-            @error('password')
-                <small class="text-danger">{{ $message }}</small>
-            @enderror
-        </div>
-        <div class="mb-3">
-            <label for="password_confirmation" class="form-label">Password confirmation</label>
-            <input
-                type="password"
-                name="password_confirmation"
-                class="form-control"
-                required
-                value=""
-            >
-            @error('password_confirmation')
-                <small class="text-danger">{{ $message }}</small>
-            @enderror
-        </div>
-            <button type="submit" class="btn btn-primary">Register</button>
-
-    </form>
+    </div>
 </x-layout>
