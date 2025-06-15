@@ -2,13 +2,13 @@
     <x-slot name="title">
         Register
     </x-slot>
-    <div class="flex items-center justify-center min-h-screen bg-gray-50">
-        <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-            <h1 class="text-2xl font-bold mb-6 text-center">Register</h1>
+    <div class="flex items-center justify-center min-h-screen bg-[#122C4F]">
+        <div class="w-full max-w-md bg-[#FBF9E4] rounded-2xl shadow-xl p-8">
+            <h1 class="text-2xl font-bold mb-6 text-center text-[#122C4F]">Register</h1>
             <form action="{{ route('register') }}" method="POST" class="space-y-5">
                 @csrf
                 <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                    <label for="name" class="block text-sm font-medium text-[#122C4F] mb-1">Full Name</label>
                     <input
                         type="text"
                         name="name"
@@ -21,7 +21,7 @@
                     @enderror
                 </div>
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+                    <label for="email" class="block text-sm font-medium text-[#122C4F] mb-1">Email address</label>
                     <input
                         type="email"
                         name="email"
@@ -34,7 +34,7 @@
                     @enderror
                 </div>
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                    <label for="password" class="block text-sm font-medium text-[#122C4F] mb-1">Password</label>
                     <input
                         type="password"
                         name="password"
@@ -46,7 +46,7 @@
                     @enderror
                 </div>
                 <div>
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Password confirmation</label>
+                    <label for="password_confirmation" class="block text-sm font-medium text-[#122C4F] mb-1">Password confirmation</label>
                     <input
                         type="password"
                         name="password_confirmation"
@@ -57,7 +57,7 @@
                         <small class="text-red-500">{{ $message }}</small>
                     @enderror
                 </div>
-                <button type="submit" class="w-full py-2 px-4 bg-green-800 text-white font-semibold rounded-2xl shadow-md hover:bg-green-900 transition">Register</button>
+                <button type="submit" class="w-full py-2 px-4 bg-[#5B88B2] text-white font-semibold rounded-2xl shadow-md hover:bg-[#49709a] transition">Register</button>
             </form>
         </div>
     </div>

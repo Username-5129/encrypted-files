@@ -7,12 +7,14 @@
 
     @vite(['resources/css/app.css'])
 </head>
-<body>
-    <main>
+<body class="bg-[#122C4F] min-h-screen flex flex-col">
+    <main class="flex-1">
         <x-navbar />
         {{ $slot }}
     </main>
-
+    <footer class="bg-black w-full h-28 flex items-center justify-center mt-10">
+        <span class="text-white text-lg">&copy; {{ date('Y') }} Fec. All rights reserved.</span>
+    </footer>
     @vite(['resources/js/app.js'])
 </body>
 </html>
