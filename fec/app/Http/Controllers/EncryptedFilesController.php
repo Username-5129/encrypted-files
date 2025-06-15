@@ -50,6 +50,7 @@ class EncryptedFilesController extends Controller
         ], [
             'password_hash.regex' => 'The password must contain at least one number.',
             'password_hash.min' => 'The password must be at least 8 characters long.',
+            'stored_path.required' => 'The Choose File field is required.',
         ]);
         $uploadedFile = $request->file('stored_path');
         $fileContent = file_get_contents($uploadedFile->getRealPath());
@@ -160,7 +161,7 @@ class EncryptedFilesController extends Controller
         // Create temp file
         $tempFilePath = tempnam(sys_get_temp_dir(), 'decfile_');
         file_put_contents($tempFilePath, $decrypted);
-        
+
         return response()->download($tempFilePath, $file->filename)->deleteFileAfterSend(true);
     }
 
@@ -185,33 +186,66 @@ class EncryptedFilesController extends Controller
             'description' => 'nullable|string',
             'is_public' => 'required|boolean',
             'password_hash' => 'required|string|min:8|regex:/[0-9]/',
+            'stored_path' => 'required|file',
         ], [
             'password_hash.regex' => 'The password must contain at least one number.',
             'password_hash.min' => 'The password must be at least 8 characters long.',
+            'stored_path.required' => 'The Choose File field is required.',
         ]);
 
-        if ($file->stored_path && Storage::exists($file->stored_path)) {
-            Storage::delete($file->stored_path);
+        // Check if a new file is uploaded
+        if ($request->hasFile('stored_path')) {
+            // Delete the old file if it exists
+            if ($file->stored_path && Storage::exists($file->stored_path)) {
+                Storage::delete($file->stored_path);
+            }
+
+            // Handle the new file upload
+            $uploadedFile = $request->file('stored_path');
+            $fileContent = file_get_contents($uploadedFile->getRealPath());
+
+            $password = $request->password_hash;
+
+            // Generate random salt and IV
+            $salt = random_bytes(16);
+            $ivLength = openssl_cipher_iv_length('aes-256-cbc');
+            $iv = random_bytes($ivLength);
+
+            // Derive key from password and salt using PBKDF2
+            $key = hash_pbkdf2('sha256', $password, $salt, 100000, 32, true);
+
+            // Encrypt file content
+            $encrypted = openssl_encrypt($fileContent, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
+
+            if ($encrypted === false) {
+                return back()->withErrors(['stored_path' => 'File encryption failed.']);
+            }
+
+            // Store salt + IV + encrypted data together
+            $encryptedData = $salt . $iv . $encrypted;
+
+            // Store the encrypted file
+            $storedPath = 'files/' . $uploadedFile->hashName();
+            Storage::put($storedPath, $encryptedData);
+        } else {
+            // If no new file is uploaded, keep the existing stored path
+            $storedPath = $file->stored_path;
         }
 
-        $uploadedFile = $request->file('stored_path');
-        $storedPath = $uploadedFile->store('files');
+        $filename = $request->input('filename') ?: $uploadedFile->getClientOriginalName();
 
-        $filename = $request->input('filename');
-        if (empty($filename)) {
-            $filename = $uploadedFile->getClientOriginalName();
-        }
-
+        // Update the file record
         $file->update([
             'filename' => $filename,
             'description' => $request->description,
             'is_public' => $request->is_public,
-            'password_hash' => $request->password_hash,
+            'password_hash' => Hash::make($request->password_hash), // Store the hashed password
             'stored_path' => $storedPath,
         ]);
 
         return redirect()->route('file.index')->with('success', 'File updated successfully.');
     }
+
 
     public function destroy(Request $request, string $id)
     {

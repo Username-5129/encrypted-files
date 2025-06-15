@@ -46,6 +46,22 @@ class User extends Authenticatable
         ];
     }
 
+    public function files() {
+        return $this->hasMany(File::class, 'owner_id');
+    }
+    public function comments() {
+        return $this->hasMany(Comment::class);
+    }
+    public function friends() {
+        return $this->belongsToMany(User::class, 'friends', 'user_id', 'friend_id');
+    }
+    public function friendRequestsSent() {
+        return $this->hasMany(FriendRequest::class, 'sender_id');
+    }
+    public function friendRequestsReceived() {
+        return $this->hasMany(FriendRequest::class, 'receiver_id');
+    }
+
     public function isAdmin() {
         return $this->role === 'admin';
     }

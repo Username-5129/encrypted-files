@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\EncryptedFilesController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FriendController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -29,4 +30,12 @@ Route::get('/files/{file}/password', function (File $file) {
     return view('files.password', compact('file'));
 })->name('files.password');
 
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/friends', [FriendController::class, 'index'])->name('friends.index');
+    Route::post('/friends/add', [FriendController::class, 'add'])->name('friends.add');
+    Route::post('/friends/respond/{id}', [FriendController::class, 'respondRequest'])->name('friends.respond');
+    Route::delete('/friends/remove/{friendId}', [FriendController::class, 'remove'])->name('friends.remove');
+
+});
 
