@@ -2,8 +2,13 @@
     <x-slot name="title">
         Register
     </x-slot>
-    <div class="flex items-center justify-center min-h-screen bg-[#122C4F]">
-        <div class="w-full max-w-md bg-[#FBF9E4] rounded-2xl shadow-xl p-8">
+    <div class="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-[#122C4F] via-[#1e3a5c] to-black overflow-hidden">
+        <!-- Decorative SVG shapes for background -->
+        <div class="absolute inset-0 pointer-events-none">
+            <svg class="absolute top-0 left-0 w-80 h-80 opacity-20" viewBox="0 0 200 200"><circle cx="100" cy="100" r="100" fill="#5B88B2"/></svg>
+            <svg class="absolute bottom-0 right-0 w-96 h-96 opacity-10" viewBox="0 0 200 200"><rect width="200" height="200" rx="100" fill="#FBF9E4"/></svg>
+        </div>
+        <div class="w-full max-w-md bg-[#FBF9E4] rounded-2xl shadow-xl p-8 relative z-10">
             <h1 class="text-2xl font-bold mb-6 text-center text-[#122C4F]">Register</h1>
             <form action="{{ route('register') }}" method="POST" class="space-y-5">
                 @csrf
@@ -12,7 +17,7 @@
                     <input
                         type="text"
                         name="name"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-800"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-800"
                         required
                         value="{{ old('name') }}"
                     >
@@ -25,7 +30,7 @@
                     <input
                         type="email"
                         name="email"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-800"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-800"
                         required
                         value="{{ old('email') }}"
                     >
@@ -38,7 +43,7 @@
                     <input
                         type="password"
                         name="password"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-800"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-800"
                         required
                     >
                     @error('password')
@@ -50,7 +55,7 @@
                     <input
                         type="password"
                         name="password_confirmation"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-800"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-800"
                         required
                     >
                     @error('password_confirmation')
