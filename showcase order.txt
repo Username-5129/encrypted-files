@@ -1,0 +1,6 @@
+Create account
+create private and public file
+edit a file
+logout
+check avaliable files
+log in as admin

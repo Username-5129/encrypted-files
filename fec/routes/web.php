@@ -23,4 +23,10 @@ Route::resource('file', EncryptedFilesController::class);
 Route::get('/files', [EncryptedFilesController::class, 'index'])->name('files.index');
 Route::get('/files/{file}/download', [EncryptedFilesController::class, 'download'])->name('files.download');
 Route::post('/file/{id}', [EncryptedFilesController::class, 'update']);
+Route::post('/files/{file}/check-password', [EncryptedFilesController::class, 'checkPassword'])->name('files.checkPassword');
+
+Route::get('/files/{file}/password', function (File $file) {
+    return view('files.password', compact('file'));
+})->name('files.password');
+
 

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 
 class EncryptedFilesController extends Controller
 {
@@ -53,18 +55,26 @@ class EncryptedFilesController extends Controller
 
         // Handle the file upload
         $uploadedFile = $request->file('stored_path');
-        $storedPath = $uploadedFile->store('files');
+
+        $fileContent = file_get_contents($uploadedFile->getRealPath());
+
+        $encryptedContent = encrypt($fileContent, false, $request->password_hash);
+
+        $storedPath = 'files/' . $uploadedFile->hashName();
+        Storage::put($storedPath, $encryptedContent);
 
         $filename = $request->input('filename');
         if (empty($filename)) {
             $filename = $uploadedFile->getClientOriginalName();
         }
 
+        $password_hash = Hash::make($request->password_hash);
+
         File::create([
             'filename' => $filename,
             'description' => $request->description,
             'is_public' => $request->is_public,
-            'password_hash' => $request->password_hash,
+            'password_hash' => $password_hash,
             'owner_id' => Auth::id(),
             'stored_path' => $storedPath,
         ]);
@@ -109,6 +119,22 @@ class EncryptedFilesController extends Controller
        
         return Storage::download($file->stored_path, $file->filename);
     }
+
+    public function checkPassword(Request $request, File $file)
+    {
+        $request->validate([
+            'password' => 'required|string',
+        ]);
+
+        // Check if the provided password matches the stored hash
+        if (!Hash::check($request->password, $file->password_hash)) {
+            return back()->withErrors(['password' => 'The provided password is incorrect.']);
+        }
+
+        // If the password is correct, proceed to download the file
+        return $this->download($file);
+    }
+
 
     public function edit(Request $request, string $id)
     {
