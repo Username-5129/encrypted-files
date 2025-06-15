@@ -6,11 +6,15 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\EncryptedFilesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FriendController;
-use App\Http\Controllers\DashboardWidgetController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::post('/dashboard/widgets/update', [DashboardWidgetController::class, 'update'])->name('dashboard.widgets.update');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::post('/homepage/settings', [HomeController::class, 'updateSettings'])->name('homepage.settings.update');
+});
+
+Route::get('/files/{file}', [EncryptedFilesController::class, 'show'])->name('files.show');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');

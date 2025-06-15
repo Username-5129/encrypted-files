@@ -121,68 +121,102 @@
 
     @auth
     <section class="min-h-screen bg-gradient-to-br from-[#122C4F] via-[#1e3a5c] to-black py-12 px-4">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-10">
-            <!-- Main Content: Quick Access Widgets -->
-            <div class="lg:col-span-3 space-y-8">
-                <!-- Customizable Dashboard Controls -->
-                <div class="flex flex-wrap gap-4 items-center mb-4">
-                    <h2 class="text-3xl font-extrabold text-[#FBF9E4]">Your Dashboard</h2>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="dashboard-widgets">
-                    @php
-                        $widgets = ['recent_files', 'quick_friends'];
-                    @endphp
-
-                    @foreach($widgets as $widget)
-                        @if($widget === 'recent_files')
-                            @include('dashboard.widgets.recent_files')
-                        @elseif($widget === 'quick_friends')
-                            @include('dashboard.widgets.quick_friends')
-                        @endif
-                    @endforeach
-                    <!-- Friends Activity Widget -->
-                    <div class="bg-[#FBF9E4] rounded-2xl shadow-lg p-6 md:col-span-2">
-                        <h3 class="font-bold text-xl text-[#122C4F] mb-4">Friends Activity</h3>
-                        <ul class="space-y-2">
-                            {{-- Example: Replace with real activity data --}}
-                            <li class="flex items-center gap-2 text-[#122C4F]">
-                                <span class="font-bold">Alice</span>
-                                <span>uploaded</span>
-                                <span class="font-semibold">project.zip</span>
-                                <span class="text-xs text-gray-500 ml-auto">2 min ago</span>
-                            </li>
-                            <li class="flex items-center gap-2 text-[#122C4F]">
-                                <span class="font-bold">Bob</span>
-                                <span>commented on</span>
-                                <span class="font-semibold">photo.png</span>
-                                <span class="text-xs text-gray-500 ml-auto">10 min ago</span>
-                            </li>
-                            <li class="flex items-center gap-2 text-[#122C4F]">
-                                <span class="font-bold">Charlie</span>
-                                <span>downloaded</span>
-                                <span class="font-semibold">notes.txt</span>
-                                <span class="text-xs text-gray-500 ml-auto">1 hour ago</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="mt-6 text-sm text-[#FBF9E4]/70">
-                    <span class="italic">Tip: You can quickly access your recent files, friends, and see what your friends are up to here.</span>
-                </div>
+        <div class="max-w-5xl mx-auto space-y-8">
+            <div class="flex justify-between items-center">
+                <h2 class="text-3xl font-extrabold text-[#FBF9E4]">Your Homepage</h2>
+                <button onclick="document.getElementById('settings-modal').classList.remove('hidden')" class="bg-[#5B88B2] text-[#FBF9E4] px-4 py-2 rounded-lg shadow hover:bg-[#49709a] transition text-sm font-semibold">
+                    Edit Homepage
+                </button>
             </div>
-            <!-- Sidebar: Quick Actions -->
-            <aside class="space-y-8">
-                <!-- Quick Upload -->
-                <div class="bg-[#FBF9E4] rounded-2xl shadow-lg p-6 flex flex-col items-center">
-                    <h3 class="font-bold text-lg text-[#122C4F] mb-4">Quick Upload</h3>
-                    <form>
-                        <input type="file" class="block w-full text-sm text-[#122C4F] mb-2" />
-                        <button class="bg-[#5B88B2] text-[#FBF9E4] font-semibold py-2 px-4 rounded-lg hover:bg-[#49709a] transition w-full">Upload</button>
-                    </form>
-                </div>
-            </aside>
+
+            @if($settings->show_recent_files)
+            <div class="bg-[#FBF9E4] rounded-2xl shadow-lg p-6">
+                <h3 class="font-bold text-xl text-[#122C4F] mb-4">Recent Files</h3>
+                @if($recentFiles->isEmpty())
+                    <p class="text-[#122C4F]">No recent files.</p>
+                @else
+                    <ul>
+                        @foreach($recentFiles as $file)
+                            <li class="text-[#122C4F]">
+                                <a href="{{ route('files.show', $file->id) }}" class="underline">{{ $file->name }}</a>
+                                <span class="text-xs text-gray-500 ml-2">{{ $file->created_at->diffForHumans() }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+            @endif
+
+            @if($settings->show_friend_activity)
+            <div class="bg-[#FBF9E4] rounded-2xl shadow-lg p-6">
+                <h3 class="font-bold text-xl text-[#122C4F] mb-4">Friends Activity</h3>
+                @if($friends->isEmpty())
+                    <p class="text-[#122C4F]">No friends yet, so no activity to show.</p>
+                @elseif($friendActivity->isEmpty())
+                    <p class="text-[#122C4F]">No recent activity from your friends.</p>
+                @else
+                    <ul>
+                        @foreach($friendActivity as $activity)
+                            <li class="text-[#122C4F]">
+                                <span class="font-bold">{{ $activity->user->name ?? $activity->user->email }}</span>
+                                {{ $activity->description }}
+                                <span class="text-xs text-gray-500 ml-2">{{ $activity->created_at->diffForHumans() }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+            @endif
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
+                <h2 class="text-xl font-bold mb-4 text-[#122C4F]">Customize Homepage</h2>
+                <form method="POST" action="{{ route('homepage.settings.update') }}">
+                    @csrf
+                    <div class="mb-4">
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" name="show_recent_files" {{ $settings->show_recent_files ? 'checked' : '' }}>
+                            Show Recent Files
+                        </label>
+                    </div>
+                    <div class="mb-4">
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" name="show_friend_activity" {{ $settings->show_friend_activity ? 'checked' : '' }}>
+                            Show Friends Activity
+                        </label>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block mb-1 text-[#122C4F]">Theme</label>
+                        <select name="theme" class="rounded border-gray-300">
+                            <option value="light" {{ $settings->theme === 'light' ? 'selected' : '' }}>Light</option>
+                            <option value="dark" {{ $settings->theme === 'dark' ? 'selected' : '' }}>Dark</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block mb-1 text-[#122C4F]">Layout</label>
+                        <select name="layout" class="rounded border-gray-300">
+                            <option value="grid" {{ $settings->layout === 'grid' ? 'selected' : '' }}>Grid</option>
+                            <option value="list" {{ $settings->layout === 'list' ? 'selected' : '' }}>List</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <button type="button" onclick="document.getElementById('settings-modal').classList.add('hidden')" class="px-4 py-2 rounded bg-gray-200 text-[#122C4F]">Cancel</button>
+                        <button type="submit" class="px-4 py-2 rounded bg-[#5B88B2] text-[#FBF9E4] font-semibold">Save</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </section>
+    <script>
+        // Simple modal close on ESC
+        document.addEventListener('keydown', function(e) {
+            if(e.key === "Escape") {
+                document.getElementById('settings-modal').classList.add('hidden');
+            }
+        });
+    </script>
     @endauth
 </x-layout>
 

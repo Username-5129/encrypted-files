@@ -61,6 +61,10 @@ class User extends Authenticatable
     public function friendRequestsReceived() {
         return $this->hasMany(FriendRequest::class, 'receiver_id');
     }
+    public function homepageSetting()
+    {
+    return $this->hasOne(\App\Models\HomepageSetting::class);
+    }
 
     public function isAdmin() {
         return $this->role === 'admin';
