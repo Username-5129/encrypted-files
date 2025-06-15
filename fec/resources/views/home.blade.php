@@ -119,9 +119,70 @@
     </section>
     @endguest
 
+    @auth
+    <section class="min-h-screen bg-gradient-to-br from-[#122C4F] via-[#1e3a5c] to-black py-12 px-4">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-10">
+            <!-- Main Content: Quick Access Widgets -->
+            <div class="lg:col-span-3 space-y-8">
+                <!-- Customizable Dashboard Controls -->
+                <div class="flex flex-wrap gap-4 items-center mb-4">
+                    <h2 class="text-3xl font-extrabold text-[#FBF9E4]">Your Dashboard</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="dashboard-widgets">
+                    @php
+                        $widgets = ['recent_files', 'quick_friends'];
+                    @endphp
 
-
-
-    
+                    @foreach($widgets as $widget)
+                        @if($widget === 'recent_files')
+                            @include('dashboard.widgets.recent_files')
+                        @elseif($widget === 'quick_friends')
+                            @include('dashboard.widgets.quick_friends')
+                        @endif
+                    @endforeach
+                    <!-- Friends Activity Widget -->
+                    <div class="bg-[#FBF9E4] rounded-2xl shadow-lg p-6 md:col-span-2">
+                        <h3 class="font-bold text-xl text-[#122C4F] mb-4">Friends Activity</h3>
+                        <ul class="space-y-2">
+                            {{-- Example: Replace with real activity data --}}
+                            <li class="flex items-center gap-2 text-[#122C4F]">
+                                <span class="font-bold">Alice</span>
+                                <span>uploaded</span>
+                                <span class="font-semibold">project.zip</span>
+                                <span class="text-xs text-gray-500 ml-auto">2 min ago</span>
+                            </li>
+                            <li class="flex items-center gap-2 text-[#122C4F]">
+                                <span class="font-bold">Bob</span>
+                                <span>commented on</span>
+                                <span class="font-semibold">photo.png</span>
+                                <span class="text-xs text-gray-500 ml-auto">10 min ago</span>
+                            </li>
+                            <li class="flex items-center gap-2 text-[#122C4F]">
+                                <span class="font-bold">Charlie</span>
+                                <span>downloaded</span>
+                                <span class="font-semibold">notes.txt</span>
+                                <span class="text-xs text-gray-500 ml-auto">1 hour ago</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-6 text-sm text-[#FBF9E4]/70">
+                    <span class="italic">Tip: You can quickly access your recent files, friends, and see what your friends are up to here.</span>
+                </div>
+            </div>
+            <!-- Sidebar: Quick Actions -->
+            <aside class="space-y-8">
+                <!-- Quick Upload -->
+                <div class="bg-[#FBF9E4] rounded-2xl shadow-lg p-6 flex flex-col items-center">
+                    <h3 class="font-bold text-lg text-[#122C4F] mb-4">Quick Upload</h3>
+                    <form>
+                        <input type="file" class="block w-full text-sm text-[#122C4F] mb-2" />
+                        <button class="bg-[#5B88B2] text-[#FBF9E4] font-semibold py-2 px-4 rounded-lg hover:bg-[#49709a] transition w-full">Upload</button>
+                    </form>
+                </div>
+            </aside>
+        </div>
+    </section>
+    @endauth
 </x-layout>
 

@@ -6,8 +6,11 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\EncryptedFilesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FriendController;
+use App\Http\Controllers\DashboardWidgetController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::post('/dashboard/widgets/update', [DashboardWidgetController::class, 'update'])->name('dashboard.widgets.update');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
