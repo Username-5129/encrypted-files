@@ -25,9 +25,6 @@ class FriendController extends Controller
         return view('friends.index', compact('friends', 'friendRequests'));
     }
 
-
-
-
     public function add(Request $request)
     {
         $request->validate([
@@ -115,6 +112,25 @@ class FriendController extends Controller
         }
     }
 
+    public function remove(Request $request, $friendId)
+    {
+        $user = Auth::user();
 
+        if (!$user) {
+            return redirect()->route('login');
+        }
 
+        $friend = User::find($friendId);
+        if (!$friend) {
+            return back()->with('error', 'Friend not found.');
+        }
+
+        Friend::where(function ($query) use ($user, $friend) {
+            $query->where('user_id', $user->id)->where('friend_id', $friend->id);
+        })->orWhere(function ($query) use ($user, $friend) {
+            $query->where('user_id', $friend->id)->where('friend_id', $user->id);
+        })->delete();
+
+        return back()->with('success', "You have removed {$friend->email} from your friends.");
+    }
 }

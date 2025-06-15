@@ -35,5 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/friends', [FriendController::class, 'index'])->name('friends.index');
     Route::post('/friends/add', [FriendController::class, 'add'])->name('friends.add');
     Route::post('/friends/respond/{id}', [FriendController::class, 'respondRequest'])->name('friends.respond');
+    Route::delete('/friends/remove/{friendId}', [FriendController::class, 'remove'])->name('friends.remove');
+
 });
 

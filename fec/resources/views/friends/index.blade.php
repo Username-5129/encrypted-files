@@ -22,11 +22,18 @@
         </div>
     @else
         <div class="flex flex-wrap -mx-4 mb-6">
-            @foreach($friends as $friend)
+             @foreach($friends as $friend)
                 <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-4">
-                    <div class="bg-white shadow-md rounded-lg p-4">
-                        <h2 class="font-semibold">{{ $friend->username ?? $friend->email ?? "User  #{$friend->id}" }}</h2>
-                        {{-- Optional: Add Remove button/link for each friend --}}
+                    <div class="bg-white shadow-md rounded-lg p-4 flex justify-between items-center">
+                        <h2 class="font-semibold">{{ $friend->username ?? $friend->email ?? "User #{$friend->id}" }}</h2>
+                        <form method="POST" action="{{ route('friends.remove', $friend->id) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" 
+                                class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition duration-200"
+                                onclick="return confirm('Are you sure you want to remove this friend?');">Remove
+                            </button>
+                        </form>
                     </div>
                 </div>
             @endforeach
@@ -59,4 +66,6 @@
             @endforeach
         </ul>
     @endif
+
+   
 </x-layout>
