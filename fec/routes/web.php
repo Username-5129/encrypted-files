@@ -9,6 +9,13 @@ use App\Http\Controllers\FriendController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::post('/homepage/settings', [HomeController::class, 'updateSettings'])->name('homepage.settings.update');
+});
+
+Route::get('/files/{file}', [EncryptedFilesController::class, 'show'])->name('files.show');
+
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);

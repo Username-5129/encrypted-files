@@ -2,7 +2,7 @@
     <x-slot name="title">
         Home
     </x-slot>
-
+    @guest
     <!-- Hero Section -->
     <section class="relative flex flex-col items-center justify-center min-h-[60vh] bg-gradient-to-br from-[#122C4F] via-[#1e3a5c] to-black overflow-hidden">
         <div class="absolute inset-0 pointer-events-none">
@@ -20,8 +20,6 @@
                 <a href="/register" class="bg-[#5B88B2] hover:bg-[#49709a] text-[#FBF9E4] font-bold py-3 px-10 rounded-full shadow-lg transition text-lg text-center">Get Started</a>
                 <a href="#about" class="bg-transparent hover:bg-[#FBF9E4] hover:text-[#122C4F] text-[#FBF9E4] font-bold py-3 px-10 rounded-full border-2 border-[#5B88B2] transition text-lg text-center">Learn More</a>
             </div>
-            <!-- Example illustration (undraw.co) -->
-            <img src="https://undraw.co/api/illustrations/secure_files.svg" alt="Secure Files" class="w-60 mt-10 object-contain transition-transform duration-300 hover:scale-105" />
         </div>
     </section>
 
@@ -47,60 +45,178 @@
     </section>
 
     <!-- About Section (How does it work?) -->
-    <section id="about" class="py-20 bg-[#5B88B2]">
-        <div class="max-w-5xl mx-auto px-6">
-            <h2 class="text-3xl font-bold text-[#122C4F] mb-12 text-center">How does it work?</h2>
-            <div class="flex flex-col gap-12">
-                <!-- Step 1 -->
-                <div class="flex flex-col md:flex-row items-center gap-8">
-                    <div class="md:w-1/2 bg-[#FBF9E4] rounded-2xl shadow-lg p-8 text-[#122C4F]">
-                        <h3 class="font-bold text-xl mb-2">1. Upload & Encrypt</h3>
-                        <p>Upload your files and set a password. Files are encrypted and stored securely.</p>
+    <section id="about" class="py-0" style="background: #5B88B2;">
+        <div class="w-full px-0">
+            <h2 class="w-full text-center pt-24 mb-20 text-7xl font-extrabold tracking-tight">
+                <span 
+                      style="color:  #122C4F; font-family: 'Playfair Display', 'Montserrat', 'Inter', sans-serif; letter-spacing: 2px; text-shadow: 0 4px 24px #0002;">
+                    How does it work?
+                </span>
+            </h2>
+            <div>
+                <!-- Step 1: Image center, text below -->
+                <div class="flex flex-col md:flex-row w-full items-center">
+                    <div class="md:w-1/2 flex items-center justify-center min-h-[420px] bg-[#5B88B2] md:rounded-none rounded-t-3xl overflow-hidden relative">
+                        <div class="absolute inset-0 w-full h-full bg-[#5B88B2]"></div>
+                        <img src="/undraw_private-files_m2bw.svg" alt="Upload & Encrypt"
+                             class="h-[320px] w-auto mx-auto object-contain relative z-10" style="border-radius:0;">
                     </div>
-                    <div class="md:w-1/2 flex justify-center">
-                        <!-- Placeholder for your image/illustration -->
-                        <div class="w-48 h-48 bg-[#122C4F] rounded-xl flex items-center justify-center">
-                            <span class="text-[#FBF9E4] text-4xl">🔒</span>
+                    <div class="md:w-1/2 bg-[#FBF9E4] flex flex-col justify-center p-16 text-[#122C4F]">
+                        <div class="max-w-2xl mx-auto flex flex-col">
+                            <h3 class="font-bold text-4xl mb-8" style="font-family: 'Montserrat', 'Inter', sans-serif;">1. Upload & Encrypt</h3>
+                            <p class="mb-6 text-2xl leading-snug">Easily upload any file type to our secure platform. When you upload, you set a password—this password is used to encrypt your file using strong encryption algorithms.</p>
+                            <p class="text-2xl leading-snug">Your file is never stored in plain text and is protected from unauthorized access at all times.</p>
                         </div>
                     </div>
                 </div>
-                <!-- Step 2 -->
-                <div class="flex flex-col md:flex-row-reverse items-center gap-8">
-                    <div class="md:w-1/2 bg-[#FBF9E4] rounded-2xl shadow-lg p-8 text-[#122C4F]">
-                        <h3 class="font-bold text-xl mb-2">2. Share & Manage</h3>
-                        <p>Share files with friends or make them public. Add users by name or share a public link.</p>
+                <!-- Step 2: Image center, text below -->
+                <div class="flex flex-col md:flex-row-reverse w-full items-center">
+                    <div class="md:w-1/2 flex items-center justify-center min-h-[420px] bg-[#5B88B2] md:rounded-none rounded-t-3xl overflow-hidden relative">
+                        <div class="absolute inset-0 w-full h-full bg-[#5B88B2]"></div>
+                        <img src="/undraw_share-link_jr6w.svg" alt="Share & Manage"
+                             class="h-[320px] w-auto mx-auto object-contain relative z-10" style="border-radius:0;">
                     </div>
-                    <div class="md:w-1/2 flex justify-center">
-                        <div class="w-48 h-48 bg-[#122C4F] rounded-xl flex items-center justify-center">
-                            <span class="text-[#FBF9E4] text-4xl">🤝</span>
+                    <div class="md:w-1/2 bg-[#FBF9E4] flex flex-col justify-center p-16 text-[#122C4F]">
+                        <div class="max-w-2xl mx-auto flex flex-col">
+                            <h3 class="font-bold text-4xl mb-8" style="font-family: 'Montserrat', 'Inter', sans-serif;">2. Share & Manage</h3>
+                            <p class="mb-6 text-2xl leading-snug">Share your encrypted files with friends by adding their usernames, or generate a public link for anyone to access (if you choose).</p>
+                            <p class="text-2xl leading-snug">Manage permissions easily—add or remove users, and control who can view, download, or edit your files at any time.</p>
                         </div>
                     </div>
                 </div>
-                <!-- Step 3 -->
-                <div class="flex flex-col md:flex-row items-center gap-8">
-                    <div class="md:w-1/2 bg-[#FBF9E4] rounded-2xl shadow-lg p-8 text-[#122C4F]">
-                        <h3 class="font-bold text-xl mb-2">3. Access Control</h3>
-                        <p>Only users with the correct password can decrypt and download files.</p>
+                <!-- Step 3: Image center, text below -->
+                <div class="flex flex-col md:flex-row w-full items-center">
+                    <div class="md:w-1/2 flex items-center justify-center min-h-[420px] bg-[#5B88B2] md:rounded-none rounded-t-3xl overflow-hidden relative">
+                        <div class="absolute inset-0 w-full h-full bg-[#5B88B2]"></div>
+                        <img src="/undraw_enter-password_1kl4.svg" alt="Access Control"
+                             class="h-[320px] w-auto mx-auto object-contain relative z-10" style="border-radius:0;">
                     </div>
-                    <div class="md:w-1/2 flex justify-center">
-                        <div class="w-48 h-48 bg-[#122C4F] rounded-xl flex items-center justify-center">
-                            <span class="text-[#FBF9E4] text-4xl">🔑</span>
+                    <div class="md:w-1/2 bg-[#FBF9E4] flex flex-col justify-center p-16 text-[#122C4F]">
+                        <div class="max-w-2xl mx-auto flex flex-col">
+                            <h3 class="font-bold text-4xl mb-8" style="font-family: 'Montserrat', 'Inter', sans-serif;">3. Access Control</h3>
+                            <p class="mb-6 text-2xl leading-snug">To download a file, users must enter the correct password. Only then is the file decrypted and made available for download.</p>
+                            <p class="text-2xl leading-snug">This ensures that even if someone obtains the file link, they cannot access its contents without your password.</p>
                         </div>
                     </div>
                 </div>
-                <!-- Step 4 -->
-                <div class="flex flex-col md:flex-row-reverse items-center gap-8">
-                    <div class="md:w-1/2 bg-[#FBF9E4] rounded-2xl shadow-lg p-8 text-[#122C4F]">
-                        <h3 class="font-bold text-xl mb-2">4. Logs, Comments & Friends</h3>
-                        <p>View file logs, comment on files, manage permissions, and easily add friends to file access.</p>
+                <!-- Step 4: Image center, text below -->
+                <div class="flex flex-col md:flex-row-reverse w-full items-center">
+                    <div class="md:w-1/2 flex items-center justify-center min-h-[420px] bg-[#5B88B2] md:rounded-none rounded-t-3xl overflow-hidden relative">
+                        <div class="absolute inset-0 w-full h-full bg-[#5B88B2]"></div>
+                        <img src="/undraw_social-interaction_6fi7.svg" alt="Logs, Comments & Friends"
+                             class="h-[320px] w-auto mx-auto object-contain relative z-10" style="border-radius:0;">
                     </div>
-                    <div class="md:w-1/2 flex justify-center">
-                        <div class="w-48 h-48 bg-[#122C4F] rounded-xl flex items-center justify-center">
-                            <span class="text-[#FBF9E4] text-4xl">💬</span>
+                    <div class="md:w-1/2 bg-[#FBF9E4] flex flex-col justify-center p-16 text-[#122C4F]">
+                        <div class="max-w-2xl mx-auto flex flex-col">
+                            <h3 class="font-bold text-4xl mb-8" style="font-family: 'Montserrat', 'Inter', sans-serif;">4. Logs, Comments & Friends</h3>
+                            <p class="mb-6 text-2xl leading-snug">Every file has a detailed log of interactions, so you can see who accessed or commented on your files. Admins can view IP addresses for extra security.</p>
+                            <p class="text-2xl leading-snug">Send friend requests, comment on files, and manage your sharing network with ease.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    @endguest
+
+    @auth
+    <section class="min-h-screen bg-gradient-to-br from-[#122C4F] via-[#1e3a5c] to-black py-12 px-4">
+        <div class="max-w-5xl mx-auto space-y-8">
+            <div class="flex justify-between items-center">
+                <h2 class="text-3xl font-extrabold text-[#FBF9E4]">Your Homepage</h2>
+                <button onclick="document.getElementById('settings-modal').classList.remove('hidden')" class="bg-[#5B88B2] text-[#FBF9E4] px-4 py-2 rounded-lg shadow hover:bg-[#49709a] transition text-sm font-semibold">
+                    Edit Homepage
+                </button>
+            </div>
+
+            @if($settings->show_recent_files)
+            <div class="bg-[#FBF9E4] rounded-2xl shadow-lg p-6">
+                <h3 class="font-bold text-xl text-[#122C4F] mb-4">Recent Files</h3>
+                @if($recentFiles->isEmpty())
+                    <p class="text-[#122C4F]">No recent files.</p>
+                @else
+                    <ul>
+                        @foreach($recentFiles as $file)
+                            <li class="text-[#122C4F]">
+                                <a href="{{ route('files.show', $file->id) }}" class="underline">{{ $file->name }}</a>
+                                <span class="text-xs text-gray-500 ml-2">{{ $file->created_at->diffForHumans() }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+            @endif
+
+            @if($settings->show_friend_activity)
+            <div class="bg-[#FBF9E4] rounded-2xl shadow-lg p-6">
+                <h3 class="font-bold text-xl text-[#122C4F] mb-4">Friends Activity</h3>
+                @if($friends->isEmpty())
+                    <p class="text-[#122C4F]">No friends yet, so no activity to show.</p>
+                @elseif($friendActivity->isEmpty())
+                    <p class="text-[#122C4F]">No recent activity from your friends.</p>
+                @else
+                    <ul>
+                        @foreach($friendActivity as $activity)
+                            <li class="text-[#122C4F]">
+                                <span class="font-bold">{{ $activity->user->name ?? $activity->user->email }}</span>
+                                {{ $activity->description }}
+                                <span class="text-xs text-gray-500 ml-2">{{ $activity->created_at->diffForHumans() }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+            @endif
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
+                <h2 class="text-xl font-bold mb-4 text-[#122C4F]">Customize Homepage</h2>
+                <form method="POST" action="{{ route('homepage.settings.update') }}">
+                    @csrf
+                    <div class="mb-4">
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" name="show_recent_files" {{ $settings->show_recent_files ? 'checked' : '' }}>
+                            Show Recent Files
+                        </label>
+                    </div>
+                    <div class="mb-4">
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" name="show_friend_activity" {{ $settings->show_friend_activity ? 'checked' : '' }}>
+                            Show Friends Activity
+                        </label>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block mb-1 text-[#122C4F]">Theme</label>
+                        <select name="theme" class="rounded border-gray-300">
+                            <option value="light" {{ $settings->theme === 'light' ? 'selected' : '' }}>Light</option>
+                            <option value="dark" {{ $settings->theme === 'dark' ? 'selected' : '' }}>Dark</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block mb-1 text-[#122C4F]">Layout</label>
+                        <select name="layout" class="rounded border-gray-300">
+                            <option value="grid" {{ $settings->layout === 'grid' ? 'selected' : '' }}>Grid</option>
+                            <option value="list" {{ $settings->layout === 'list' ? 'selected' : '' }}>List</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <button type="button" onclick="document.getElementById('settings-modal').classList.add('hidden')" class="px-4 py-2 rounded bg-gray-200 text-[#122C4F]">Cancel</button>
+                        <button type="submit" class="px-4 py-2 rounded bg-[#5B88B2] text-[#FBF9E4] font-semibold">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <script>
+        // Simple modal close on ESC
+        document.addEventListener('keydown', function(e) {
+            if(e.key === "Escape") {
+                document.getElementById('settings-modal').classList.add('hidden');
+            }
+        });
+    </script>
+    @endauth
 </x-layout>
+
