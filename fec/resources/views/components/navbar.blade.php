@@ -8,6 +8,8 @@
         </a>
         <div class="flex items-center space-x-10 ml-20">
           <a href="/files" class="text-white font-semibold text-xl relative after:block after:h-0.5 after:bg-[#5B88B2] after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left">Files</a>
+          <a href="{{ route('file.create') }}" class="text-white font-semibold text-xl relative after:block after:h-0.5 after:bg-[#5B88B2] after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left">create Files</a>
+        
         </div>
       </div>
       <!-- Right side: Auth links -->
