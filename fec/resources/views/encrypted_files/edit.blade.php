@@ -35,6 +35,11 @@
         </div>
 
         <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Old password</label>
+            <input type="password" name="old_password_hash" value="{{ old('old_password_hash') }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" required>
+        </div>
+
+        <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700">Password</label>
             <input type="password" name="password_hash" value="{{ old('password_hash') }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" required>
         </div>

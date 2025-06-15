@@ -185,8 +185,9 @@ class EncryptedFilesController extends Controller
             'filename' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'is_public' => 'required|boolean',
-            'password_hash' => 'required|string|min:8|regex:/[0-9]/',
-            'stored_path' => 'required|file',
+            'old_password_hash' => 'nullable|string',
+            'password_hash' => 'nullable|string',
+            'stored_path' => 'nullable|file',
         ], [
             'password_hash.regex' => 'The password must contain at least one number.',
             'password_hash.min' => 'The password must be at least 8 characters long.',
@@ -227,19 +228,36 @@ class EncryptedFilesController extends Controller
             // Store the encrypted file
             $storedPath = 'files/' . $uploadedFile->hashName();
             Storage::put($storedPath, $encryptedData);
+
+            $filename = $request->input('filename') ?: $uploadedFile->getClientOriginalName();
         } else {
             // If no new file is uploaded, keep the existing stored path
             $storedPath = $file->stored_path;
+            $filename = $request->input('filename') ?: $file->filename;
         }
 
-        $filename = $request->input('filename') ?: $uploadedFile->getClientOriginalName();
+        if ($request->has('password_hash')) {
+            // Validate the new password if provided
+            $request->validate([
+                'password_hash' => 'required|string|min:8|regex:/[0-9]/',
+            ], [
+                'password_hash.regex' => 'The password must contain at least one number.',
+                'password_hash.min' => 'The password must be at least 8 characters long.',
+            ]);
+            $password_hash = Hash::make($request->password_hash);
+        } else {
+            // If no new password is provided, keep the existing one
+            $password_hash = $file->password_hash;
+        }
+
+        
 
         // Update the file record
         $file->update([
             'filename' => $filename,
             'description' => $request->description,
             'is_public' => $request->is_public,
-            'password_hash' => Hash::make($request->password_hash), // Store the hashed password
+            'password_hash' => $password_hash,
             'stored_path' => $storedPath,
         ]);
 
