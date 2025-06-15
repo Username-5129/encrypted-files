@@ -1,9 +1,9 @@
 <x-layout>
     <x-slot name="title">
-        Create New Job file
+        Create New file
     </x-slot>
 
-    <h1 class="mb-4 text-2xl font-bold">Create New Job file</h1>
+    <h1 class="mb-4 text-2xl font-bold">Create New file</h1>
     @if ($errors->any())
     <div class="bg-red-500 text-white p-4 rounded mb-4">
         <ul>
