@@ -11,7 +11,7 @@
           @auth
           <a href="{{ route('friends.index') }}" class="text-white font-semibold text-xl relative after:block after:h-0.5 after:bg-[#5B88B2] after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left">Friends</a>
           
-          <a href="{{ route('file.create') }}" class="text-white font-semibold text-xl relative after:block after:h-0.5 after:bg-[#5B88B2] after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left">create Files</a>
+          <a href="{{ route('file.create') }}" class="text-white font-semibold text-xl relative after:block after:h-0.5 after:bg-[#5B88B2] after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left">Create files</a>
           @endauth
         </div>
       </div>
