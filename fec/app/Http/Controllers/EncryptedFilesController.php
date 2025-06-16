@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\File;
+use App\Models\User;
+use App\Models\FileAccess;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -25,15 +27,29 @@ class EncryptedFilesController extends Controller
             $publicFiles = $files->filter(function ($file) {
                 return $file->is_public;
             });
+
+            $sharedFiles = $files->filter(function ($file) {
+                return auth()->user()->can('viewShared', $file);
+            });
+
+            $adminFiles = collect();
+            if (Auth::user()->isAdmin()) {
+                $adminFiles = $files->filter(function ($file) {
+                return !$file->is_public && $file->owner_id !== auth()->id();
+            });
+                
+            }
         } else {
             $publicFiles = $files->filter(function ($file) {
                 return $file->is_public;
             });
             
             $userFiles = collect();
+            $adminFiles = collect();
+            $sharedFiles = collect();
         }
 
-        return view('encrypted_files.index', compact('userFiles', 'publicFiles'));
+        return view('encrypted_files.index', compact('userFiles', 'publicFiles', 'adminFiles', 'sharedFiles'));
     }
 
     public function create(Request $request) {
@@ -317,35 +333,6 @@ class EncryptedFilesController extends Controller
         $file->delete();
         return redirect()->route('file.index')->with('success', 'File deleted successfully.');
     }
-
-    public function manageAccess(string $id)
-    {
-        $file = File::findOrFail($id);
-        $user = Auth::user();
-
-        $usersWithAccess = $file->fileAccess()->with('users')->get();
-
-        $friends = $user->friends()->get();
-        $friendsWithoutAccess = $friends->filter(function ($friend) use ($file) {
-            return !$file->fileAccess()->where('user_id', $friend->id)->exists();
-        });
-        return view('encrypted_files.manage_access', compact('file', 'usersWithAccess', 'friendsWithoutAccess'));
-    }
-
-    public function addAccess($fileId, $userId)
-    {
-        $file = File::findOrFail($fileId);
-        $user = Auth::user();
-
-        FileAccess::create([
-            'file_id' => $file->id,
-            'user_id' => $userId,
-            'can_edit' => false,
-        ]);
-
-        return back()->with('success', "Access granted to user.");
-    }
-
 }
 
 

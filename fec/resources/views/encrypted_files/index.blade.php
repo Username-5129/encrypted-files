@@ -44,6 +44,57 @@
             </div>
             @endauth
 
+            @auth
+            @if (Auth::user()->isAdmin())
+            <div class="bg-[#1e3a5c]/80 border border-[#5B88B2] rounded-2xl shadow-xl p-8">
+                <h2 class="mb-6 text-2xl font-bold text-[#FBF9E4] flex items-center gap-2">
+                    <svg class="w-6 h-6 text-[#5B88B2]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16V8a2 2 0 012-2h4l2 2h6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2z" />
+                    </svg>
+                    All Encrypted Files
+                </h2>
+                @if ($adminFiles->count())
+                    <div class="flex flex-wrap -mx-4">
+                        @foreach ($adminFiles as $file)
+                            <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-6">
+                                <x-file-card :file="$file" />
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="bg-[#FBF9E4] text-[#122C4F] px-4 py-3 rounded shadow text-center">
+                        No files available.
+                    </div>
+                @endif
+            </div>
+            @endif
+            @endauth
+
+            @auth
+            <div class="bg-[#1e3a5c]/80 border border-[#5B88B2] rounded-2xl shadow-xl p-8">
+                <h2 class="mb-6 text-2xl font-bold text-[#FBF9E4] flex items-center gap-2">
+                    <svg class="w-6 h-6 text-[#5B88B2]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16V8a2 2 0 012-2h4l2 2h6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2z" />
+                    </svg>
+                    Shared Encrypted Files
+                </h2>
+                @if ($sharedFiles->count())
+                    <div class="flex flex-wrap -mx-4">
+                        @foreach ($sharedFiles as $file)
+                            <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-6">
+                                <x-file-card :file="$file" />
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="bg-[#FBF9E4] text-[#122C4F] px-4 py-3 rounded shadow text-center">
+                        No files available.
+                    </div>
+                @endif
+            </div>
+            @endauth
+
+
             <div class="bg-[#1e3a5c]/80 border border-[#5B88B2] rounded-2xl shadow-xl p-8">
                 <h2 class="mb-6 text-2xl font-bold text-[#FBF9E4] flex items-center gap-2">
                     <svg class="w-6 h-6 text-[#5B88B2]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
