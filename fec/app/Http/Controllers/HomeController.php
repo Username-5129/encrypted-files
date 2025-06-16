@@ -12,6 +12,10 @@ class HomeController extends Controller
 {
     public function index()
     {
+        if (!auth()->check()) {
+            return view('guest_home');
+        }
+        
         $user = Auth::user();
         $settings = $user->homepageSetting ?? HomepageSetting::firstOrCreate(['user_id' => $user->id]);
 

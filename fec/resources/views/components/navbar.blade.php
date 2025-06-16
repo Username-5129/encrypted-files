@@ -3,7 +3,7 @@
     <div class="flex justify-between h-20 items-center">
       <!-- Left side: Logo and links -->
       <div class="flex items-center">
-        <a href="/">
+        <a href="{{ route('home') }}">
           <img src="/fec-logo-2.png" alt="Logo" class="h-12 w-auto">
         </a>
         <div class="flex items-center space-x-10 ml-20">

@@ -10,7 +10,6 @@ use App\Http\Controllers\FriendController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::post('/homepage/settings', [HomeController::class, 'updateSettings'])->name('homepage.settings.update');
 });
 
