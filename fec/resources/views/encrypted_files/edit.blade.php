@@ -23,12 +23,12 @@
 
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-[#FBF9E4]">Filename</label>
-                    <input type="text" placeholder="Leave this empty to save the original filename" name="filename" value="{{ old('filename') }}" class="mt-1 block w-full border-[#5B88B2] rounded-lg shadow-sm focus:ring-2 focus:ring-[#5B88B2] focus:outline-none p-2 bg-[#122C4F] text-[#FBF9E4] placeholder-[#FBF9E4]/60">
+                    <input type="text" placeholder="Leave this empty to save the original filename" name="filename" value="{{ old('filename', $file->filename) }}" class="mt-1 block w-full border-[#5B88B2] rounded-lg shadow-sm focus:ring-2 focus:ring-[#5B88B2] focus:outline-none p-2 bg-[#122C4F] text-[#FBF9E4] placeholder-[#FBF9E4]/60">
                 </div>
 
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-[#FBF9E4]">Description</label>
-                    <textarea name="description" class="mt-1 block w-full border-[#5B88B2] rounded-lg shadow-sm focus:ring-2 focus:ring-[#5B88B2] focus:outline-none p-2 bg-[#122C4F] text-[#FBF9E4] placeholder-[#FBF9E4]/60" rows="5">{{ old('description') }}</textarea>
+                    <textarea name="description" class="mt-1 block w-full border-[#5B88B2] rounded-lg shadow-sm focus:ring-2 focus:ring-[#5B88B2] focus:outline-none p-2 bg-[#122C4F] text-[#FBF9E4] placeholder-[#FBF9E4]/60" rows="5">{{ old('description', $file->description) }}</textarea>
                 </div>
 
                 <div class="mb-4">

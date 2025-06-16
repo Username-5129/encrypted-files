@@ -30,13 +30,13 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin'
         ]);
 
-        $file1 = File::create([
-            'filename' => 'fails1',
-            'stored_path' => '/somerandom/filepath/file3253232',
-            'description' => 'Hello there, this is a sample description.',
-            'owner_id' => 1,
-            'is_public' => true,
-            'password_hash' => 'temp'
-        ]);
+        // $file1 = File::create([
+        //     'filename' => 'fails1',
+        //     'stored_path' => '/somerandom/filepath/file3253232',
+        //     'description' => 'Hello there, this is a sample description.',
+        //     'owner_id' => 1,
+        //     'is_public' => true,
+        //     'password_hash' => 'temp'
+        // ]);
     }
 }

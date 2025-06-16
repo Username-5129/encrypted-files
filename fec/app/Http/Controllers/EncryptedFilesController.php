@@ -55,6 +55,7 @@ class EncryptedFilesController extends Controller
             'password_hash' => 'required|string|min:8|regex:/[0-9]/',
             'stored_path' => 'required|file',
         ], [
+            'password_hash.required' => 'The password field is required.',
             'password_hash.regex' => 'The password must contain at least one number.',
             'password_hash.min' => 'The password must be at least 8 characters long.',
             'stored_path.required' => 'The Choose File field is required.',
@@ -68,7 +69,7 @@ class EncryptedFilesController extends Controller
         $ivLength = openssl_cipher_iv_length('aes-256-cbc');
         $iv = random_bytes($ivLength);
 
-        // Derive key from password and salt using PBKDF2 (recommended iterations)
+        // Derive key from password and salt using PBKDF2
         $key = hash_pbkdf2('sha256', $password, $salt, 100000, 32, true);
 
         // Encrypt file content
@@ -85,15 +86,15 @@ class EncryptedFilesController extends Controller
         $storedPath = 'files/' . $storedFilename;
         Storage::put($storedPath, $encryptedData);
 
-        // Use password hash securely for authentication, not encryption key
-        $passwordHash = Hash::make($password);
+        // Use password hash securely for authentication
+        $password_hash = Hash::make($password);
 
         $filename = $request->input('filename') ?: $uploadedFile->getClientOriginalName();
         File::create([
             'filename' => $filename,
             'description' => $request->description,
             'is_public' => $request->is_public,
-            'password_hash' => $passwordHash,
+            'password_hash' => $password_hash,
             'owner_id' => auth()->id(),
             'stored_path' => $storedPath,
         ]);
@@ -197,17 +198,22 @@ class EncryptedFilesController extends Controller
             'stored_path' => 'nullable|file',
         ]);
 
-        // Check if a new file is uploaded
         if ($request->hasFile('stored_path')) {
-            // Delete the old file if it exists
+
+            $request->validate([
+                'password_hash' => 'required|string|min:8|regex:/[0-9]/',
+            ], [
+                'password_hash.required' => 'The password field is required.',
+                'password_hash.regex' => 'The password must contain at least one number.',
+                'password_hash.min' => 'The password must be at least 8 characters long.',
+            ]);
             if ($file->stored_path && Storage::exists($file->stored_path)) {
                 Storage::delete($file->stored_path);
             }
+            // return back()->withErrors(['password' => 'file.']);
 
-            // Handle the new file upload
             $uploadedFile = $request->file('stored_path');
             $fileContent = file_get_contents($uploadedFile->getRealPath());
-
             $password = $request->password_hash;
 
             // Generate random salt and IV
@@ -220,7 +226,6 @@ class EncryptedFilesController extends Controller
 
             // Encrypt file content
             $encrypted = openssl_encrypt($fileContent, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
-
             if ($encrypted === false) {
                 return back()->withErrors(['stored_path' => 'File encryption failed.']);
             }
@@ -228,60 +233,64 @@ class EncryptedFilesController extends Controller
             // Store salt + IV + encrypted data together
             $encryptedData = $salt . $iv . $encrypted;
 
-            // Store the encrypted file
-            $storedPath = 'files/' . $uploadedFile->hashName();
+            // Store encrypted file
+            $storedFilename = $uploadedFile->hashName();
+            $storedPath = 'files/' . $storedFilename;
             Storage::put($storedPath, $encryptedData);
+
+            // Use password hash securely for authentication
+            $password_hash = Hash::make($password);
 
             $filename = $request->input('filename') ?: $uploadedFile->getClientOriginalName();
-        } else {
-            // If no new file is uploaded, keep the existing stored path
+
+        } else if ($request->filled('password_hash') || $request->filled('old_password_hash')) {
             $storedPath = $file->stored_path;
             $filename = $request->input('filename') ?: $file->filename;
-        }
+            if ($request->filled('old_password_hash')) {
+                
+                if (!Hash::check($request->old_password_hash, $file->password_hash)) {
+                    return back()->withErrors(['password' => 'The provided old password is incorrect.']);
+                }
+                $request->validate([
+                    'password_hash' => 'required|string|min:8|regex:/[0-9]/',
+                ], [
+                    'password_hash.required' => 'The password field is required.',
+                    'password_hash.regex' => 'The new password must contain at least one number.',
+                    'password_hash.min' => 'The new password must be at least 8 characters long.',
+                ]);
+                $password_hash = Hash::make($request->password_hash);
 
-        if ($request->filled('password_hash') || $request->filled('old_password_hash')) {
-            // Validate the new password if provided
+                // Decrypt the existing file content
+                $encryptedData = Storage::get($file->stored_path);
+                $salt = substr($encryptedData, 0, 16);
+                $ivLength = openssl_cipher_iv_length('aes-256-cbc');
+                $iv = substr($encryptedData, 16, $ivLength);
+                $encryptedContent = substr($encryptedData, 16 + $ivLength);
 
-            if (!Hash::check($request->old_password_hash, $file->password_hash)) {
-                return back()->withErrors(['password' => 'The provided old password is incorrect.']);
+                // Derive key from the old password and salt
+                $oldKey = hash_pbkdf2('sha256', $request->old_password_hash, $salt, 100000, 32, true);
+                // Decrypt the file content
+                $decryptedContent = openssl_decrypt($encryptedContent, 'aes-256-cbc', $oldKey, OPENSSL_RAW_DATA, $iv);
+                if ($decryptedContent === false) {
+                    return back()->withErrors(['stored_path' => 'Failed to decrypt file with the given password.']);
+                }
+                
+                // Re-encrypt the file content with the new password hash
+                $newSalt = random_bytes(16);
+                $newIv = random_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+                $newKey = hash_pbkdf2('sha256', $request->password_hash, $newSalt, 100000, 32, true);
+                $newEncrypted = openssl_encrypt($decryptedContent, 'aes-256-cbc', $newKey, OPENSSL_RAW_DATA, $newIv);
+                if ($newEncrypted === false) {
+                    return back()->withErrors(['stored_path' => 'File re-encryption failed.']);
+                }
+                // Store new salt + IV + re-encrypted data together
+                $encryptedData = $newSalt . $newIv . $newEncrypted;
+                Storage::put($storedPath, $encryptedData);
             }
-            $request->validate([
-                'password_hash' => 'required|string|min:8|regex:/[0-9]/',
-            ], [
-                'password_hash.regex' => 'The new password must contain at least one number.',
-                'password_hash.min' => 'The new password must be at least 8 characters long.',
-            ]);
-            $password_hash = Hash::make($request->password_hash);
-
-            // Decrypt the existing file content
-            $encryptedData = Storage::get($file->stored_path);
-            $salt = substr($encryptedData, 0, 16);
-            $ivLength = openssl_cipher_iv_length('aes-256-cbc');
-            $iv = substr($encryptedData, 16, $ivLength);
-            $encryptedContent = substr($encryptedData, 16 + $ivLength);
-
-            // Derive key from the old password and salt
-            $oldKey = hash_pbkdf2('sha256', $request->old_password_hash, $salt, 100000, 32, true);
-            // Decrypt the file content
-            $decryptedContent = openssl_decrypt($encryptedContent, 'aes-256-cbc', $oldKey, OPENSSL_RAW_DATA, $iv);
-            if ($decryptedContent === false) {
-                return back()->withErrors(['stored_path' => 'Failed to decrypt file with the given password.']);
-            }
-            
-            // Re-encrypt the file content with the new password hash
-            $newSalt = random_bytes(16);
-            $newIv = random_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-            $newKey = hash_pbkdf2('sha256', $request->password_hash, $newSalt, 100000, 32, true);
-            $newEncrypted = openssl_encrypt($decryptedContent, 'aes-256-cbc', $newKey, OPENSSL_RAW_DATA, $newIv);
-            if ($newEncrypted === false) {
-                return back()->withErrors(['stored_path' => 'File re-encryption failed.']);
-            }
-            // Store new salt + IV + re-encrypted data together
-            $encryptedData = $newSalt . $newIv . $newEncrypted;
-            Storage::put($storedPath, $encryptedData);
         } else {
-            // If no new password is provided, keep the existing one
+            $filename = $request->input('filename') ?: $file->filename;
             $password_hash = $file->password_hash;
+            $storedPath = $file->stored_path;
         }
 
         // Update the file record
