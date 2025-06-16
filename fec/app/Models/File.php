@@ -15,11 +15,6 @@ class File extends Model
         'password_hash',
     ];
 
-    // public function __construct()
-    // {
-    //     $this->middleware('auth')->except(['encrypted_files.index', 'show']);
-    // }
-
     public function user()
     {
         return $this->belongsTo(User::class, 'owner_id');
@@ -27,7 +22,7 @@ class File extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comments::class, 'file_id');
+        return $this->hasMany(Comment::class, 'file_id');
     }
 
     public function logs()
