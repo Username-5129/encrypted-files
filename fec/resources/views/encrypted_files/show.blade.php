@@ -66,40 +66,25 @@
     </form>
 
     @foreach ($file->comments as $comment)
-    <div class="comment border p-4 rounded mb-3 flex justify-between items-start gap-4">
-        <div>
-            <p><strong>{{ $comment->users->name }}:</strong></p>
-            <p>{{ $comment->content }}</p>
-        </div>
-        @can('update', $comment)
-        <div class="flex gap-2">
-            <form action="{{ route('comments.edit', $comment->id) }}" method="GET">
-                <button type="submit" class="btn btn-warning px-3 py-1 text-sm rounded">Edit</button>
-            </form>
-            @can('delete', $comment)
-            <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this comment?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger px-3 py-1 text-sm rounded">Delete</button>
-            </form>
+        <div class="comment border p-4 rounded mb-3 flex justify-between items-start gap-4">
+            <div>
+                <p><strong>{{ $comment->users->name }}:</strong></p>
+                <p>{{ $comment->content }}</p>
+            </div>
+            @can('update', $comment)
+            <div class="flex gap-2">
+                <form action="{{ route('comments.edit', $comment->id) }}" method="GET">
+                    <button type="submit" class="btn btn-warning px-3 py-1 text-sm rounded">Edit</button>
+                </form>
+                @can('delete', $comment)
+                <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger px-3 py-1 text-sm rounded">Delete file</button>
+                </form>
+                @endcan
+            </div>
             @endcan
         </div>
-        @endcan
-    </div>
-@endforeach
-
-    @can('update', $file)
-    <hr>
-    <a href="{{ route('file.edit', $file->id) }}" class="btn btn-primary">Edit file</a>
-    <br>
-    @endcan
-    @can('delete', $file)
-    <hr>
-    <form action="{{ route('file.destroy', $file->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this file?');">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="btn btn-danger">Delete</button>
-    </form>
-    @endcan
-    
+    @endforeach
 </x-layout>

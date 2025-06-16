@@ -17,18 +17,25 @@ class EncryptedFilesController extends Controller
         $files = File::all();
 
         if (auth()->check()) {
-            $files = $files->filter(function ($file) {
-                return auth()->user()->can('view', $file);
+            // Get files that belong to the authenticated user
+            $userFiles = $files->filter(function ($file) {
+                return $file->owner_id === auth()->id();
             });
-        } else {
-            $files = $files->filter(function ($file) {
+            
+            $publicFiles = $files->filter(function ($file) {
                 return $file->is_public;
             });
+        } else {
+            $publicFiles = $files->filter(function ($file) {
+                return $file->is_public;
+            });
+            
+            $userFiles = collect();
         }
 
-        // Return the view with the filtered files
-        return view('encrypted_files.index', compact('files'));
+        return view('encrypted_files.index', compact('userFiles', 'publicFiles'));
     }
+
 
 
     public function create(Request $request) {
@@ -285,7 +292,7 @@ class EncryptedFilesController extends Controller
             'password_hash' => $password_hash,
             'stored_path' => $storedPath,
         ]);
-        
+
         return view('encrypted_files.show', compact('file'));
     }
 
