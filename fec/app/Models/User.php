@@ -63,7 +63,11 @@ class User extends Authenticatable
     }
     public function homepageSetting()
     {
-    return $this->hasOne(\App\Models\HomepageSetting::class);
+        return $this->hasOne(HomepageSetting::class);
+    }
+    public function fileAccess()
+    {
+        return $this->hasMany(FileAccess::class, 'user_id');
     }
 
     public function isAdmin() {

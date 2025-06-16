@@ -30,7 +30,7 @@ class File extends Model
         return $this->hasMany(Logs::class, 'file_id');
     }
 
-    public function file_access()
+    public function fileAccess()
     {
         return $this->hasMany(FileAccess::class, 'file_id');
     }

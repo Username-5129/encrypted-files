@@ -36,8 +36,6 @@ class EncryptedFilesController extends Controller
         return view('encrypted_files.index', compact('userFiles', 'publicFiles'));
     }
 
-
-
     public function create(Request $request) {
         if ($request->user()->cannot('create', File::class)) {
             abort(403, 'You are not authorized to create a file.');
@@ -100,7 +98,6 @@ class EncryptedFilesController extends Controller
         ]);
         return redirect()->route('file.index')->with('success', 'File encrypted and stored successfully.');
     }
-
 
     public function show(string $id)
     {
@@ -305,7 +302,6 @@ class EncryptedFilesController extends Controller
         return view('encrypted_files.show', compact('file'));
     }
 
-
     public function destroy(Request $request, string $id)
     {
         $file = File::findOrFail($id);
@@ -321,6 +317,35 @@ class EncryptedFilesController extends Controller
         $file->delete();
         return redirect()->route('file.index')->with('success', 'File deleted successfully.');
     }
+
+    public function manageAccess(string $id)
+    {
+        $file = File::findOrFail($id);
+        $user = Auth::user();
+
+        $usersWithAccess = $file->fileAccess()->with('users')->get();
+
+        $friends = $user->friends()->get();
+        $friendsWithoutAccess = $friends->filter(function ($friend) use ($file) {
+            return !$file->fileAccess()->where('user_id', $friend->id)->exists();
+        });
+        return view('encrypted_files.manage_access', compact('file', 'usersWithAccess', 'friendsWithoutAccess'));
+    }
+
+    public function addAccess($fileId, $userId)
+    {
+        $file = File::findOrFail($fileId);
+        $user = Auth::user();
+
+        FileAccess::create([
+            'file_id' => $file->id,
+            'user_id' => $userId,
+            'can_edit' => false,
+        ]);
+
+        return back()->with('success', "Access granted to user.");
+    }
+
 }
 
 
