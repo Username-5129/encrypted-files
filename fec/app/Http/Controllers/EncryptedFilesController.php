@@ -232,7 +232,7 @@ class EncryptedFilesController extends Controller
             $filename = $request->input('filename') ?: $file->filename;
         }
 
-        if ($request->filled('password_hash') && $request->filled('old_password_hash')) {
+        if ($request->filled('password_hash') || $request->filled('old_password_hash')) {
             // Validate the new password if provided
 
             if (!Hash::check($request->old_password_hash, $file->password_hash)) {
@@ -260,10 +260,6 @@ class EncryptedFilesController extends Controller
             if ($decryptedContent === false) {
                 return back()->withErrors(['stored_path' => 'Failed to decrypt file with the given password.']);
             }
-
-
-
-
             
             // Re-encrypt the file content with the new password hash
             $newSalt = random_bytes(16);
@@ -281,9 +277,6 @@ class EncryptedFilesController extends Controller
             $password_hash = $file->password_hash;
         }
 
-
-        
-
         // Update the file record
         $file->update([
             'filename' => $filename,
@@ -292,8 +285,8 @@ class EncryptedFilesController extends Controller
             'password_hash' => $password_hash,
             'stored_path' => $storedPath,
         ]);
-
-        return redirect()->route('file.index')->with('success', 'File updated successfully.');
+        
+        return view('encrypted_files.show', compact('file'));
     }
 
 
