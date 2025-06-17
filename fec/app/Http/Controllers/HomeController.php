@@ -28,14 +28,14 @@ class HomeController extends Controller
         // Fetch friends (assuming you have a friends() relationship)
         $friends = $user->friends ?? collect();
 
-        // Fetch recent activity from friends (if you have an Activity model)
+        // Fetch recent activity from friends 
         $friendActivity = collect();
-        // if ($friends->isNotEmpty()) {
-        //     $friendActivity = Activity::whereIn('user_id', $friends->pluck('id'))
-        //         ->latest()
-        //         ->take(10)
-        //         ->get();
-        // }
+        if ($friends->isNotEmpty()) {
+            $friendActivity = File::whereIn('owner_id', $friends->pluck('id'))
+                ->latest()
+                ->take(10)
+                ->get();
+        }
 
         return view('home', compact('settings', 'recentFiles', 'friendActivity', 'friends'));
     }

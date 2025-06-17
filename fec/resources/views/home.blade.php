@@ -29,63 +29,145 @@
                 </button>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- Recent Files -->
-                <div class="bg-[#1e3a5c]/90 border border-[#5B88B2] rounded-2xl shadow-2xl p-8 flex flex-col">
-                    <h3 class="font-bold text-2xl text-[#FBF9E4] mb-4 flex items-center gap-2">
-                        <svg class="w-6 h-6 text-[#5B88B2]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16V8a2 2 0 012-2h4l2 2h6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2z" />
-                        </svg>
-                        Recent Files
-                    </h3>
-                    @if($recentFiles->isEmpty())
-                        <p class="text-[#FBF9E4]/80">No recent files.</p>
-                    @else
-                        <ul class="space-y-3">
-                            @foreach($recentFiles as $file)
-                                <li class="flex items-center justify-between bg-[#122C4F] rounded-lg px-4 py-2 shadow">
-                                    <div>
-                                        <a href="{{ route('files.show', $file->id) }}" class="text-[#FBF9E4] font-semibold hover:underline">{{ $file->filename }}</a>
-                                        <span class="text-xs text-[#5B88B2] ml-2">{{ $file->created_at->diffForHumans() }}</span>
-                                    </div>
-                                    <span class="text-xs px-2 py-1 rounded-full
-                                        {{ $file->is_public
-                                            ? 'bg-[#22543d]/80 border border-[#38a169] text-[#BFD7ED]'
-                                            : 'bg-[#4a232e]/80 border border-[#e53e3e] text-[#BFD7ED]' }}
-                                        font-bold">
-                                        {{ $file->is_public ? 'Public' : 'Private' }}
-                                    </span>
-                                </li>
-                            @endforeach
-                        </ul>
+            @if($settings->layout === 'grid')
+                <div class="grid md:grid-cols-2 gap-8">
+                    @if($settings->show_recent_files)
+                    <!-- Recent Files -->
+                    <div class="bg-[#1e3a5c]/90 border border-[#5B88B2] rounded-2xl shadow-2xl p-8 flex flex-col">
+                        <h3 class="font-bold text-2xl text-[#FBF9E4] mb-4 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-[#5B88B2]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16V8a2 2 0 012-2h4l2 2h6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2z" />
+                            </svg>
+                            Recent Files
+                        </h3>
+                        @if($recentFiles->isEmpty())
+                            <p class="text-[#FBF9E4]/80">No recent files.</p>
+                        @else
+                            <ul class="space-y-3">
+                                @foreach($recentFiles as $file)
+                                    <li class="flex items-center justify-between bg-[#122C4F] rounded-lg px-4 py-2 shadow">
+                                        <div>
+                                            <a href="{{ route('files.show', $file->id) }}" class="text-[#FBF9E4] font-semibold hover:underline">{{ $file->filename }}</a>
+                                            <span class="text-xs text-[#5B88B2] ml-2">{{ $file->created_at->diffForHumans() }}</span>
+                                        </div>
+                                        <span class="text-xs px-2 py-1 rounded-full
+                                            {{ $file->is_public
+                                                ? 'bg-[#22543d]/80 border border-[#38a169] text-[#BFD7ED]'
+                                                : 'bg-[#4a232e]/80 border border-[#e53e3e] text-[#BFD7ED]' }}
+                                            font-bold">
+                                            {{ $file->is_public ? 'Public' : 'Private' }}
+                                        </span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
                     @endif
-                </div>
 
-                <!-- Friends Activity -->
-                <div class="bg-[#1e3a5c]/90 border border-[#5B88B2] rounded-2xl shadow-2xl p-8 flex flex-col">
-                    <h3 class="font-bold text-2xl text-[#FBF9E4] mb-4 flex items-center gap-2">
-                        <svg class="w-6 h-6 text-[#5B88B2]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-5a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                        Friends Activity
-                    </h3>
-                    @if($friends->isEmpty())
-                        <p class="text-[#FBF9E4]/80">No friends yet, so no activity to show.</p>
-                    @elseif($friendActivity->isEmpty())
-                        <p class="text-[#FBF9E4]/80">No recent activity from your friends.</p>
-                    @else
-                        <ul class="space-y-3">
-                            @foreach($friendActivity as $activity)
-                                <li class="bg-[#122C4F] rounded-lg px-4 py-2 shadow text-[#FBF9E4]">
-                                    <span class="font-bold text-[#5B88B2]">{{ $activity->user->name ?? $activity->user->email }}</span>
-                                    {{ $activity->description }}
-                                    <span class="text-xs text-[#5B88B2] ml-2">{{ $activity->created_at->diffForHumans() }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
+                    @if($settings->show_friend_activity)
+                    <!-- Friends Activity -->
+                    <div class="bg-[#1e3a5c]/90 border border-[#5B88B2] rounded-2xl shadow-2xl p-8 flex flex-col">
+                        <h3 class="font-bold text-2xl text-[#FBF9E4] mb-4 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-[#5B88B2]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-5a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            Friends Activity
+                        </h3>
+                        @if($friends->isEmpty())
+                            <p class="text-[#FBF9E4]/80">No friends yet, so no activity to show.</p>
+                        @elseif($friendActivity->isEmpty())
+                            <p class="text-[#FBF9E4]/80">No recent activity from your friends.</p>
+                        @else
+                            <ul class="space-y-3">
+                                @foreach($friendActivity as $activity)
+                                    <li class="bg-[#122C4F] rounded-lg px-4 py-2 shadow text-[#FBF9E4]">
+                                        <span class="font-bold text-[#5B88B2]">
+                                            {{ $activity->user->name ?? $activity->user->email }}
+                                        </span>
+                                        uploaded 
+                                        <a href="{{ route('files.show', $activity->id) }}" class="underline text-[#BFD7ED] font-semibold">
+                                            {{ $activity->filename }}
+                                        </a>
+                                        <span class="text-xs text-[#5B88B2] ml-2">
+                                            {{ $activity->created_at->diffForHumans() }}
+                                        </span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
                     @endif
                 </div>
-            </div>
+            @else
+                <div class="flex flex-col gap-8">
+                    @if($settings->show_recent_files)
+                    <!-- Recent Files -->
+                    <div class="bg-[#1e3a5c]/90 border border-[#5B88B2] rounded-2xl shadow-2xl p-8 flex flex-col">
+                        <h3 class="font-bold text-2xl text-[#FBF9E4] mb-4 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-[#5B88B2]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16V8a2 2 0 012-2h4l2 2h6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2z" />
+                            </svg>
+                            Recent Files
+                        </h3>
+                        @if($recentFiles->isEmpty())
+                            <p class="text-[#FBF9E4]/80">No recent files.</p>
+                        @else
+                            <ul class="space-y-3">
+                                @foreach($recentFiles as $file)
+                                    <li class="flex items-center justify-between bg-[#122C4F] rounded-lg px-4 py-2 shadow">
+                                        <div>
+                                            <a href="{{ route('files.show', $file->id) }}" class="text-[#FBF9E4] font-semibold hover:underline">{{ $file->filename }}</a>
+                                            <span class="text-xs text-[#5B88B2] ml-2">{{ $file->created_at->diffForHumans() }}</span>
+                                        </div>
+                                        <span class="text-xs px-2 py-1 rounded-full
+                                            {{ $file->is_public
+                                                ? 'bg-[#22543d]/80 border border-[#38a169] text-[#BFD7ED]'
+                                                : 'bg-[#4a232e]/80 border border-[#e53e3e] text-[#BFD7ED]' }}
+                                            font-bold">
+                                            {{ $file->is_public ? 'Public' : 'Private' }}
+                                        </span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
+                    @endif
+
+                    @if($settings->show_friend_activity)
+                    <!-- Friends Activity -->
+                    <div class="bg-[#1e3a5c]/90 border border-[#5B88B2] rounded-2xl shadow-2xl p-8 flex flex-col">
+                        <h3 class="font-bold text-2xl text-[#FBF9E4] mb-4 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-[#5B88B2]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-5a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            Friends Activity
+                        </h3>
+                        @if($friends->isEmpty())
+                            <p class="text-[#FBF9E4]/80">No friends yet, so no activity to show.</p>
+                        @elseif($friendActivity->isEmpty())
+                            <p class="text-[#FBF9E4]/80">No recent activity from your friends.</p>
+                        @else
+                            <ul class="space-y-3">
+                                @foreach($friendActivity as $activity)
+                                    <li class="bg-[#122C4F] rounded-lg px-4 py-2 shadow text-[#FBF9E4]">
+                                        <span class="font-bold text-[#5B88B2]">
+                                            {{ $activity->user->name ?? $activity->user->email }}
+                                        </span>
+                                        uploaded 
+                                        <a href="{{ route('files.show', $activity->id) }}" class="underline text-[#BFD7ED] font-semibold">
+                                            {{ $activity->filename }}
+                                        </a>
+                                        <span class="text-xs text-[#5B88B2] ml-2">
+                                            {{ $activity->created_at->diffForHumans() }}
+                                        </span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
+                    @endif
+                </div>
+            @endif
         </div>
 
         <!-- Settings Modal -->
@@ -105,13 +187,6 @@
                             <input type="checkbox" name="show_friend_activity" {{ $settings->show_friend_activity ? 'checked' : '' }}>
                             Show Friends Activity
                         </label>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block mb-1 text-[#122C4F]">Theme</label>
-                        <select name="theme" class="rounded border-[#5B88B2] focus:ring-2 focus:ring-[#5B88B2]">
-                            <option value="light" {{ $settings->theme === 'light' ? 'selected' : '' }}>Light</option>
-                            <option value="dark" {{ $settings->theme === 'dark' ? 'selected' : '' }}>Dark</option>
-                        </select>
                     </div>
                     <div class="mb-4">
                         <label class="block mb-1 text-[#122C4F]">Layout</label>
