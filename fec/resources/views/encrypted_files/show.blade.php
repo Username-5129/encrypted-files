@@ -38,6 +38,9 @@
                         @can('update', $file)
                             <a href="{{ route('file.edit', $file->id) }}" class="bg-[#5B88B2] text-[#FBF9E4] px-4 py-2 rounded-lg font-semibold shadow hover:bg-[#49709a] transition text-center">Edit file</a>
                         @endcan
+                        @can('manageAccess', $file)
+                            <a href="{{ route('files.manageAccess', $file->id) }}" class="bg-[#5B88B2] text-[#FBF9E4] px-4 py-2 rounded-lg font-semibold shadow hover:bg-[#49709a] transition text-center">Manage Access</a>
+                        @endcan
                         @can('delete', $file)
                             <a href="{{ route('file.edit', $file->id) }}" class="bg-[#5B88B2] text-[#FBF9E4] px-4 py-2 rounded-lg font-semibold shadow hover:bg-[#49709a] transition text-center">Manage access</a>
                             <form action="{{ route('file.destroy', $file->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this file?');">
@@ -76,6 +79,7 @@
                 @endif
             </div>
 
+            @auth
             <!-- Comments Section -->
             <div class="bg-[#1e3a5c]/90 border border-[#5B88B2] rounded-2xl shadow-2xl p-8">
                 <h2 class="text-2xl font-bold text-[#FBF9E4] mb-4">Comments</h2>
@@ -110,6 +114,7 @@
                     </div>
                 @endforeach
             </div>
+            @endauth
         </div>
     </div>
 </x-layout>

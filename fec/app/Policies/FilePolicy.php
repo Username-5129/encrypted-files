@@ -19,10 +19,30 @@ class FilePolicy
     /**
      * Determine whether the user can view the model.
      */
+
+    public function viewShared(User $user, File $file): bool
+    {
+        $owner = User::find($file->owner_id);
+        if ($owner && $user->friends()->where('friend_id', $owner->id)->exists()) {
+            return $file->fileAccess()->where('user_id', $user->id)->exists();
+        }
+
+        return false;
+    }
+    
     public function view(User $user, File $file): bool
     {
-        return $user->id === $file->owner_id || $file->is_public;
+        if ($user->id === $file->owner_id || $file->is_public) {
+            return true;
+        }
+
+        if ($this->viewShared($user, $file)) {
+            return true;
+        }
+
+        return false;
     }
+
 
     /**
      * Determine whether the user can create models.
@@ -37,13 +57,42 @@ class FilePolicy
      */
     public function update(User $user, File $file): bool
     {
-        return $user->id === $file->owner_id;
+        if($user->id === $file->owner_id) {
+            return true;
+        }
+
+        $owner = User::find($file->owner_id);
+        if ($owner && $user->friends()->where('friend_id', $owner->id)->exists()) {
+            return $file->fileAccess()
+                ->where('user_id', $user->id)
+                ->where('can_edit', true)
+                ->exists();
+        }
+
+        return false;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
     public function delete(User $user, File $file): bool
+    {
+        if($user->id === $file->owner_id) {
+            return true;
+        }
+
+        $owner = User::find($file->owner_id);
+        if ($owner && $user->friends()->where('friend_id', $owner->id)->exists()) {
+            return $file->fileAccess()
+                ->where('user_id', $user->id)
+                ->where('can_edit', true)
+                ->exists();
+        }
+
+        return false;
+    }
+
+    public function manageAccess(User $user, File $file): bool
     {
         return $user->id === $file->owner_id;
     }

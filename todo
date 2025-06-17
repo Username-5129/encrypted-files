@@ -2,17 +2,19 @@ add two password fields to check if the password is correct
 
 5. Logs will be available for each file, to view its past interactions.
 6. The IP address is only visible to the administrators.
+
 10. Users can add friend activity to their homepage.
 11. Each user can choose from the available languages supported by the system, and upon choosing a language - that will be their default language.
 12. Users will be able to choose what is on their homepage.
 
 In progress:
-1. A user entered another user's name to their shared file, now they can view and download the file.
-9. Can more easily add friends as people who can edit their file information.
 
 Done:
+1. A user entered another user's name to their shared file, now they can view and download the file.
 2. Guests will be able to view files if the file is labeled as public.
 3. The user must add a password to the file (when uploading it), when downloading a file, the user must enter a password of the file, and only if the password is correct – the file is decrypted and downloaded.
 4. The files are encrypted after uploading and stored as encrypted files.
 7. Users can comment on each file.
 8. Users can send friend requests to other users
+9. Can more easily add friends as people who can edit their file information.
+

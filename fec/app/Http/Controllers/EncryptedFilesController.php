@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\File;
+use App\Models\User;
+use App\Models\FileAccess;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -25,18 +27,30 @@ class EncryptedFilesController extends Controller
             $publicFiles = $files->filter(function ($file) {
                 return $file->is_public;
             });
+
+            $sharedFiles = $files->filter(function ($file) {
+                return auth()->user()->can('viewShared', $file);
+            });
+
+            $adminFiles = collect();
+            if (Auth::user()->isAdmin()) {
+                $adminFiles = $files->filter(function ($file) {
+                return !$file->is_public && $file->owner_id !== auth()->id();
+            });
+                
+            }
         } else {
             $publicFiles = $files->filter(function ($file) {
                 return $file->is_public;
             });
             
             $userFiles = collect();
+            $adminFiles = collect();
+            $sharedFiles = collect();
         }
 
-        return view('encrypted_files.index', compact('userFiles', 'publicFiles'));
+        return view('encrypted_files.index', compact('userFiles', 'publicFiles', 'adminFiles', 'sharedFiles'));
     }
-
-
 
     public function create(Request $request) {
         if ($request->user()->cannot('create', File::class)) {
@@ -100,7 +114,6 @@ class EncryptedFilesController extends Controller
         ]);
         return redirect()->route('file.index')->with('success', 'File encrypted and stored successfully.');
     }
-
 
     public function show(string $id)
     {
@@ -304,7 +317,6 @@ class EncryptedFilesController extends Controller
 
         return view('encrypted_files.show', compact('file'));
     }
-
 
     public function destroy(Request $request, string $id)
     {
