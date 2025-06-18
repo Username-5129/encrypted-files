@@ -6,6 +6,10 @@ add two password fields to check if the password is correct
 10. Users can add friend activity to their homepage.
 11. Each user can choose from the available languages supported by the system, and upon choosing a language - that will be their default language.
 12. Users will be able to choose what is on their homepage.
+13. Store logs and display on each file
+14. Language switching with api
+15. Not logged fix 'create new file'
+
 
 In progress:
 
