@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\File;
+use App\Models\Logs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,6 +19,13 @@ class CommentController extends Controller
     {
         $request->validate([
             'content' => 'required|string|max:255',
+        ]);
+
+        Logs::create([
+            'file_id' => $fileId,
+            'user_id' => Auth::user()->id,
+            'ip_address' => request()->ip(),
+            'action' => 'comment add',
         ]);
 
         $comment = new Comment();
@@ -44,6 +52,13 @@ class CommentController extends Controller
             'content' => 'required|string|max:255',
         ]);
 
+        Logs::create([
+            'file_id' => $comment->file_id,
+            'user_id' => Auth::user()->id,
+            'ip_address' => request()->ip(),
+            'action' => 'comment edit',
+        ]);
+
         $comment->content = $request->content;
         $comment->save();
 
@@ -55,6 +70,14 @@ class CommentController extends Controller
     public function destroy(Comment $comment)
     {
         $this->authorize('delete', $comment);
+
+        Logs::create([
+            'file_id' => $comment->file_id,
+            'user_id' => Auth::user()->id,
+            'ip_address' => request()->ip(),
+            'action' => 'comment delete',
+        ]);
+
         $comment->delete();
         return back()->with('success', 'Comment deleted successfully.');
     }

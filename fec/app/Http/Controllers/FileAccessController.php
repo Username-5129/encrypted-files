@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\File;
 use App\Models\FileAccess;
+use App\Models\Logs;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -43,6 +44,13 @@ class FileAccessController extends Controller
             return redirect()->back()->with('error', 'You do not have permission to grant access to this file.');
         }
 
+        Logs::create([
+            'file_id' => $fileId,
+            'user_id' => Auth::user()->id,
+            'ip_address' => request()->ip(),
+            'action' => 'access add',
+        ]);
+
         FileAccess::create([
             'file_id' => $file->id,
             'user_id' => $userId,
@@ -62,6 +70,13 @@ class FileAccessController extends Controller
             return redirect()->back()->with('error', 'You do not have permission to toggle editing for this file.');
         }
 
+        Logs::create([
+            'file_id' => $file->id,
+            'user_id' => Auth::user()->id,
+            'ip_address' => request()->ip(),
+            'action' => 'access toggle',
+        ]);
+
         $fileAccess->can_edit = !$fileAccess->can_edit;
         $fileAccess->save();
 
@@ -77,6 +92,13 @@ class FileAccessController extends Controller
         if (!$this->authorizeUser ($file)) {
             return redirect()->back()->with('error', 'You do not have permission to remove access for this file.');
         }
+
+        Logs::create([
+            'file_id' => $file->id,
+            'user_id' => Auth::user()->id,
+            'ip_address' => request()->ip(),
+            'action' => 'access remove',
+        ]);
 
         $fileAccess->delete();
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Friend;
 use App\Models\FriendRequest;
+use App\Models\Logs;
 use Auth;
 
 class FriendController extends Controller
@@ -69,6 +70,13 @@ class FriendController extends Controller
             // If declined, you may allow sending a new one or handle differently here
         }
 
+        Logs::create([
+            'file_id' => null,
+            'user_id' => Auth::user()->id,
+            'ip_address' => request()->ip(),
+            'action' => 'friend add',
+        ]);
+
         // Create the friend request with status pending
         FriendRequest::create([
             'sender_id' => $user->id,
@@ -92,6 +100,12 @@ class FriendController extends Controller
         if ($action === 'accept') {
             // Update friend request status
             $friendRequest->update(['status' => 'accepted']);
+            Logs::create([
+                'file_id' => null,
+                'user_id' => Auth::user()->id,
+                'ip_address' => request()->ip(),
+                'action' => 'friend accept',
+            ]);
 
             // Create reciprocal friend records
             Friend::create([
@@ -105,6 +119,12 @@ class FriendController extends Controller
 
             return back()->with('success', "Friend request accepted.");
         } elseif ($action === 'decline') {
+            Logs::create([
+                'file_id' => null,
+                'user_id' => Auth::user()->id,
+                'ip_address' => request()->ip(),
+                'action' => 'friend decline',
+            ]);
             $friendRequest->update(['status' => 'declined']);
             return back()->with('success', "Friend request declined.");
         } else {
@@ -130,6 +150,13 @@ class FriendController extends Controller
         })->orWhere(function ($query) use ($user, $friend) {
             $query->where('user_id', $friend->id)->where('friend_id', $user->id);
         })->delete();
+
+        Logs::create([
+            'file_id' => null,
+            'user_id' => Auth::user()->id,
+            'ip_address' => request()->ip(),
+            'action' => 'friend remove',
+        ]);
 
         return back()->with('success', "You have removed {$friend->email} from your friends.");
     }

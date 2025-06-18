@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\HomepageSetting;
 use App\Models\File;
 use App\Models\Activity;
+use App\Models\Logs;
 
 class HomeController extends Controller
 {
@@ -42,6 +43,12 @@ class HomeController extends Controller
 
     public function updateSettings(Request $request)
     {
+        Logs::create([
+            'file_id' => null,
+            'user_id' => Auth::user()->id,
+            'ip_address' => request()->ip(),
+            'action' => 'homepage edit',
+        ]);
         $user = Auth::user();
         $settings = $user->homepageSetting ?? new HomepageSetting(['user_id' => $user->id]);
         $settings->show_recent_files = $request->has('show_recent_files');

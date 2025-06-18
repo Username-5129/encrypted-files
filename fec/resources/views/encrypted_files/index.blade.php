@@ -14,10 +14,12 @@
         <div class="relative max-w-7xl mx-auto space-y-12">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10">
                 <h1 class="text-3xl font-extrabold text-[#FBF9E4] mb-4 md:mb-0">Encrypted Files</h1>
+                @auth
                 <a href="{{ route('file.create') }}"
                    class="inline-block bg-[#5B88B2] text-[#FBF9E4] font-semibold px-6 py-2 rounded-lg shadow hover:bg-[#49709a] transition text-lg">
                     + Create New File
                 </a>
+                @endauth
             </div>
 
             @auth

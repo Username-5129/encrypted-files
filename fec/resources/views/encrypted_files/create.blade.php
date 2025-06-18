@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-[#FBF9E4]">Is Public</label>
+                    <label class="block text-sm font-medium text-[#FBF9E4]">Is public</label>
                     <select name="is_public" class="mt-1 block w-full border-[#5B88B2] rounded-lg shadow-sm focus:ring-2 focus:ring-[#5B88B2] focus:outline-none p-2 bg-[#122C4F] text-[#FBF9E4]">
                         <option value="0" {{ old('is_public', '0') == '0' ? 'selected' : '' }}>No</option>
                         <option value="1" {{ old('is_public') == '1' ? 'selected' : '' }}>Yes</option>
@@ -42,6 +42,10 @@
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-[#FBF9E4]">Password</label>
                     <input type="password" name="password_hash" value="{{ old('password_hash') }}" class="mt-1 block w-full border-[#5B88B2] rounded-lg shadow-sm focus:ring-2 focus:ring-[#5B88B2] focus:outline-none p-2 bg-[#122C4F] text-[#FBF9E4] placeholder-[#FBF9E4]/60" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-[#FBF9E4]">Confirm password</label>
+                    <input type="password" name="confirm_password_hash" value="{{ old('confirm_password_hash') }}" class="mt-1 block w-full border-[#5B88B2] rounded-lg shadow-sm focus:ring-2 focus:ring-[#5B88B2] focus:outline-none p-2 bg-[#122C4F] text-[#FBF9E4] placeholder-[#FBF9E4]/60" required>
                 </div>
 
                 <div class="mb-4">

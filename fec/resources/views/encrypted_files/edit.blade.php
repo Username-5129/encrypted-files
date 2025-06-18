@@ -50,6 +50,11 @@
                 </div>
 
                 <div class="mb-4">
+                    <label class="block text-sm font-medium text-[#FBF9E4]">Confirm password</label>
+                    <input type="password" name="confirm_password_hash" value="{{ old('confirm_password_hash') }}" class="mt-1 block w-full border-[#5B88B2] rounded-lg shadow-sm focus:ring-2 focus:ring-[#5B88B2] focus:outline-none p-2 bg-[#122C4F] text-[#FBF9E4] placeholder-[#FBF9E4]/60">
+                </div>
+
+                <div class="mb-4">
                     <label class="block text-sm font-medium text-[#FBF9E4]" for="stored_path">Upload file</label>
                     <input class="block w-full text-sm text-[#FBF9E4] border-[#5B88B2] rounded-lg bg-[#122C4F] focus:ring-2 focus:ring-[#5B88B2] focus:outline-none p-2 file:bg-[#5B88B2] file:text-[#FBF9E4] file:rounded file:border-0" id="stored_path" name="stored_path" type="file">
                 </div>

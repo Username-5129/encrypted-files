@@ -8,6 +8,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FriendController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FileAccessController;
+use App\Http\Controllers\LogController;
+use App\Http\Controllers\LanguageController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -33,7 +35,7 @@ Route::get('/files/{file}/download', [EncryptedFilesController::class, 'download
 Route::post('/file/{id}', [EncryptedFilesController::class, 'update']);
 Route::post('/files/{file}/check-password', [EncryptedFilesController::class, 'checkPassword'])->name('files.checkPassword');
 
-Route::get('/files/{file}/manage-access', [FileAccessController::class, 'manageAccess'])->name('files.manageAccess');
+    Route::get('/files/{file}/manage-access', [FileAccessController::class, 'manageAccess'])->name('files.manageAccess');
 Route::post('/files/{file}/access/{user}', [FileAccessController::class, 'addAccess'])->name('files.addAccess');
 Route::post('/files/{file}/toggle-edit/{user}', [FileAccessController::class, 'toggleEdit'])->name('files.toggleEdit');
 Route::delete('/files/{file}/remove-access/{user}', [FileAccessController::class, 'removeAccess'])->name('files.removeAccess');
@@ -57,4 +59,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/friends/remove/{friendId}', [FriendController::class, 'remove'])->name('friends.remove');
 
 });
+
+Route::get('/files/{file}/logs', [LogController::class, 'index'])->name('files.logs');
+
+Route::post('/api/translate-text', [LanguageController::class, 'translate']);
+
 

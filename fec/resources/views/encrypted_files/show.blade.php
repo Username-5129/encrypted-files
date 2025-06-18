@@ -40,9 +40,9 @@
                         @endcan
                         @can('manageAccess', $file)
                             <a href="{{ route('files.manageAccess', $file->id) }}" class="bg-[#5B88B2] text-[#FBF9E4] px-4 py-2 rounded-lg font-semibold shadow hover:bg-[#49709a] transition text-center">Manage Access</a>
-                        @endcan
+                            <a href="{{ route('files.logs', $file->id) }}" class="bg-[#5B88B2] text-[#FBF9E4] px-4 py-2 rounded-lg font-semibold shadow hover:bg-[#49709a] transition text-center">Veiw Logs</a>
+                            @endcan
                         @can('delete', $file)
-                            <a href="{{ route('file.edit', $file->id) }}" class="bg-[#5B88B2] text-[#FBF9E4] px-4 py-2 rounded-lg font-semibold shadow hover:bg-[#49709a] transition text-center">Manage access</a>
                             <form action="{{ route('file.destroy', $file->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this file?');">
                                 @csrf
                                 @method('DELETE')
