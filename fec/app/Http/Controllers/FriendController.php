@@ -43,7 +43,7 @@ class FriendController extends Controller
             return back()->with('error', "You cannot send a friend request to yourself.");
         }
 
-        // Check if an existing friendship exists
+       
         $alreadyFriends = Friend::where(function($q) use ($user, $receiver) {
             $q->where('user_id', $user->id)->where('friend_id', $receiver->id);
         })->orWhere(function($q) use ($user, $receiver) {
@@ -54,7 +54,6 @@ class FriendController extends Controller
             return back()->with('error', "You are already friends with {$receiver->email}.");
         }
 
-        // Check if a friend request already exists (sent or received)
         $existingRequest = FriendRequest::where(function($q) use ($user, $receiver) {
             $q->where('sender_id', $user->id)->where('receiver_id', $receiver->id);
         })->orWhere(function($q) use ($user, $receiver) {
@@ -67,7 +66,6 @@ class FriendController extends Controller
             } elseif ($existingRequest->status === 'accepted') {
                 return back()->with('error', "You are already friends with {$receiver->email}.");
             }
-            // If declined, you may allow sending a new one or handle differently here
         }
 
         Logs::create([
@@ -77,7 +75,6 @@ class FriendController extends Controller
             'action' => 'friend add',
         ]);
 
-        // Create the friend request with status pending
         FriendRequest::create([
             'sender_id' => $user->id,
             'receiver_id' => $receiver->id,
@@ -95,10 +92,9 @@ class FriendController extends Controller
             ->where('status', 'pending')
             ->firstOrFail();
 
-        $action = $request->input('action'); // 'accept' or 'decline'
+        $action = $request->input('action'); 
 
         if ($action === 'accept') {
-            // Update friend request status
             $friendRequest->update(['status' => 'accepted']);
             Logs::create([
                 'file_id' => null,
@@ -107,7 +103,6 @@ class FriendController extends Controller
                 'action' => 'friend accept',
             ]);
 
-            // Create reciprocal friend records
             Friend::create([
                 'user_id' => $friendRequest->sender_id,
                 'friend_id' => $friendRequest->receiver_id,

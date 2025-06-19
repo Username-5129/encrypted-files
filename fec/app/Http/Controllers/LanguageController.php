@@ -3,33 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 use App\Services\LibreTranslateService;
+use Illuminate\Http\RedirectResponse;
 
 class LanguageController extends Controller
 {
-    protected $translationService;
-
-    public function __construct(LibreTranslateService $translationService)
+    public function switchLanguage(Request $request, string $locale): RedirectResponse
     {
-        $this->translationService = $translationService;
-    }
-
-    public function translate(Request $request)
-    {
-        $request->validate([
-            'text' => 'required|string|max:500',
-            'target_lang' => 'required|string|size:2',
-        ]);
-
-        $text = $request->input('text');
-        $targetLang = $request->input('target_lang');
-
-        $translated = $this->translationService->translate($text, $targetLang);
-
-        return response()->json([
-            'original' => $text,
-            'translated' => $translated,
-            'target_lang' => $targetLang,
-        ]);
+        $availableLocales = ['en', 'lv'];
+        if (in_array($locale, $availableLocales)) {
+            App::setLocale($locale);
+            Session::put('applocale', $locale);
+        }
+        $redirectTo = url()->previous() ?: route('home');
+        return redirect($redirectTo);
     }
 }

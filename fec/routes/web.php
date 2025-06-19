@@ -27,8 +27,6 @@ Route::middleware('guest')->group(function () {
 });
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
-Route::get('/about', [AboutController::class, 'index'])->name('about');
-
 Route::resource('file', EncryptedFilesController::class);
 Route::get('/files', [EncryptedFilesController::class, 'index'])->name('files.index');
 Route::get('/files/{file}/download', [EncryptedFilesController::class, 'download'])->name('files.download');
@@ -62,6 +60,8 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/files/{file}/logs', [LogController::class, 'index'])->name('files.logs');
 
-Route::post('/api/translate-text', [LanguageController::class, 'translate']);
-
-
+Route::get('/api/current-time', function () {
+    return response()->json([
+        'time' => now()->format('H:i:s'),
+    ]);
+});

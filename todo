@@ -1,8 +1,8 @@
 
 
-10. Users can add friend activity to their homepage.
+
 11. Each user can choose from the available languages supported by the system, and upon choosing a language - that will be their default language.
-12. Users will be able to choose what is on their homepage.
+
 
 14. Language switching with api
 
@@ -19,6 +19,8 @@ Done:
 7. Users can comment on each file.
 8. Users can send friend requests to other users
 9. Can more easily add friends as people who can edit their file information.
+10. Users can add friend activity to their homepage.
+12. Users will be able to choose what is on their homepage.
 13. Store logs and display on each file
 15. Not logged fix 'create new file'
 16. Add two password fields to check if the password is correct

@@ -2,10 +2,8 @@
     <x-slot name="title">
         Home
     </x-slot>
-    <!-- Hero Section -->
     <section class="relative flex flex-col items-center justify-center min-h-[60vh] bg-gradient-to-br from-[#122C4F] via-[#1e3a5c] to-black overflow-hidden">
         <div class="absolute inset-0 pointer-events-none">
-            <!-- Decorative SVG shapes for background -->
             <svg class="absolute top-0 left-0 w-80 h-80 opacity-20" viewBox="0 0 200 200"><circle cx="100" cy="100" r="100" fill="#5B88B2"/></svg>
             <svg class="absolute bottom-0 right-0 w-96 h-96 opacity-10" viewBox="0 0 200 200"><rect width="200" height="200" rx="100" fill="#FBF9E4"/></svg>
         </div>
@@ -22,7 +20,6 @@
         </div>
     </section>
 
-    <!-- Features Section -->
     <section class="py-20 bg-[#122C4F]">
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-8">
             <div class="bg-[#FBF9E4] rounded-2xl shadow-lg p-8 flex flex-col items-center hover:scale-105 hover:shadow-2xl transition-transform duration-300">
@@ -43,7 +40,6 @@
         </div>
     </section>
 
-    <!-- About Section (How does it work?) -->
     <section id="about" class="py-0" style="background: #5B88B2;">
         <div class="w-full px-0">
             <h2 class="w-full text-center pt-24 mb-20 text-7xl font-extrabold tracking-tight">
@@ -53,7 +49,6 @@
                 </span>
             </h2>
             <div>
-                <!-- Step 1: Image center, text below -->
                 <div class="flex flex-col md:flex-row w-full items-center">
                     <div class="md:w-1/2 flex items-center justify-center min-h-[420px] bg-[#5B88B2] md:rounded-none rounded-t-3xl overflow-hidden relative">
                         <div class="absolute inset-0 w-full h-full bg-[#5B88B2]"></div>
@@ -68,7 +63,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Step 2: Image center, text below -->
                 <div class="flex flex-col md:flex-row-reverse w-full items-center">
                     <div class="md:w-1/2 flex items-center justify-center min-h-[420px] bg-[#5B88B2] md:rounded-none rounded-t-3xl overflow-hidden relative">
                         <div class="absolute inset-0 w-full h-full bg-[#5B88B2]"></div>
@@ -83,7 +77,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Step 3: Image center, text below -->
                 <div class="flex flex-col md:flex-row w-full items-center">
                     <div class="md:w-1/2 flex items-center justify-center min-h-[420px] bg-[#5B88B2] md:rounded-none rounded-t-3xl overflow-hidden relative">
                         <div class="absolute inset-0 w-full h-full bg-[#5B88B2]"></div>
@@ -98,7 +91,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Step 4: Image center, text below -->
                 <div class="flex flex-col md:flex-row-reverse w-full items-center">
                     <div class="md:w-1/2 flex items-center justify-center min-h-[420px] bg-[#5B88B2] md:rounded-none rounded-t-3xl overflow-hidden relative">
                         <div class="absolute inset-0 w-full h-full bg-[#5B88B2]"></div>

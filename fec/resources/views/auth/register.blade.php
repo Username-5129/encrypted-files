@@ -3,7 +3,6 @@
         Register
     </x-slot>
     <div class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#122C4F] via-[#1e3a5c] to-black py-12 px-4 overflow-hidden">
-        <!-- Decorative SVG shapes for background -->
         <svg class="absolute top-0 left-0 w-80 h-80 opacity-20 pointer-events-none" viewBox="0 0 200 200">
             <circle cx="100" cy="100" r="100" fill="#5B88B2"/>
         </svg>

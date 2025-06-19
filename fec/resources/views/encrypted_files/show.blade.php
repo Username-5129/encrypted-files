@@ -3,7 +3,6 @@
         {{ $file->title }}
     </x-slot>
     <div class="relative min-h-screen bg-gradient-to-br from-[#122C4F] via-[#1e3a5c] to-black py-12 px-4 overflow-hidden">
-        <!-- Decorative SVG shapes for background -->
         <svg class="absolute top-0 left-0 w-80 h-80 opacity-20 pointer-events-none" viewBox="0 0 200 200">
             <circle cx="100" cy="100" r="100" fill="#5B88B2"/>
         </svg>
@@ -12,7 +11,6 @@
         </svg>
 
         <div class="relative max-w-3xl mx-auto space-y-8">
-            <!-- File Info Card -->
             <div class="bg-[#1e3a5c]/90 border border-[#5B88B2] rounded-2xl shadow-2xl p-8">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                     <div>
@@ -80,7 +78,6 @@
             </div>
 
             @auth
-            <!-- Comments Section -->
             <div class="bg-[#1e3a5c]/90 border border-[#5B88B2] rounded-2xl shadow-2xl p-8">
                 <h2 class="text-2xl font-bold text-[#FBF9E4] mb-4">Comments</h2>
                 <form action="{{ route('comments.store', $file->id) }}" method="POST" class="mb-6">

@@ -4,7 +4,6 @@
     </x-slot>
 
     <div class="relative min-h-screen bg-gradient-to-br from-[#122C4F] via-[#1e3a5c] to-black py-12 px-4 overflow-hidden">
-        <!-- Decorative SVG shapes for background -->
         <svg class="absolute top-0 left-0 w-80 h-80 opacity-20 pointer-events-none" viewBox="0 0 200 200">
             <circle cx="100" cy="100" r="100" fill="#5B88B2"/>
         </svg>
@@ -13,7 +12,6 @@
         </svg>
 
         <div class="relative max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
-            <!-- Friends List -->
             <div class="lg:col-span-2">
                 <h1 class="text-3xl font-extrabold mb-8 text-[#FBF9E4]">My Friends</h1>
                 @if(session('success'))
@@ -60,9 +58,7 @@
                 @endif
             </div>
 
-            <!-- Sidebar: Add Friend & Requests -->
             <div class="space-y-8">
-                <!-- Add Friend -->
                 <div class="bg-[#1e3a5c]/90 border border-[#5B88B2] rounded-2xl shadow-xl p-6">
                     <h2 class="text-xl font-bold mb-4 text-[#FBF9E4]">Add Friend</h2>
                     <form method="POST" action="{{ route('friends.add') }}" class="flex flex-col gap-3">
@@ -74,7 +70,6 @@
                     </form>
                 </div>
 
-                <!-- Friend Requests -->
                 <div class="bg-[#1e3a5c]/90 border border-[#5B88B2] rounded-2xl shadow-xl p-6">
                     <h2 class="text-xl font-bold mb-4 text-[#FBF9E4]">Friend Requests</h2>
                     @if($friendRequests->isEmpty())

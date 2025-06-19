@@ -4,7 +4,6 @@
     </x-slot>
     @auth
     <section class="relative min-h-screen bg-gradient-to-br from-[#122C4F] via-[#1e3a5c] to-black py-12 px-4 overflow-hidden">
-        <!-- Decorative SVG shapes for background -->
         <svg class="absolute top-0 left-0 w-80 h-80 opacity-20 pointer-events-none" viewBox="0 0 200 200">
             <circle cx="100" cy="100" r="100" fill="#5B88B2"/>
         </svg>
@@ -13,7 +12,6 @@
         </svg>
 
         <div class="relative max-w-6xl mx-auto space-y-10">
-            <!-- Header -->
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                 <div>
                     <h2 class="text-4xl font-extrabold text-[#FBF9E4] mb-2">Welcome, {{ Auth::user()->name ?? 'User' }}!</h2>
@@ -32,7 +30,7 @@
             @if($settings->layout === 'grid')
                 <div class="grid md:grid-cols-2 gap-8">
                     @if($settings->show_recent_files)
-                    <!-- Recent Files -->
+
                     <div class="bg-[#1e3a5c]/90 border border-[#5B88B2] rounded-2xl shadow-2xl p-8 flex flex-col">
                         <h3 class="font-bold text-2xl text-[#FBF9E4] mb-4 flex items-center gap-2">
                             <svg class="w-6 h-6 text-[#5B88B2]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -65,7 +63,6 @@
                     @endif
 
                     @if($settings->show_friend_activity)
-                    <!-- Friends Activity -->
                     <div class="bg-[#1e3a5c]/90 border border-[#5B88B2] rounded-2xl shadow-2xl p-8 flex flex-col">
                         <h3 class="font-bold text-2xl text-[#FBF9E4] mb-4 flex items-center gap-2">
                             <svg class="w-6 h-6 text-[#5B88B2]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -101,7 +98,7 @@
             @else
                 <div class="flex flex-col gap-8">
                     @if($settings->show_recent_files)
-                    <!-- Recent Files -->
+
                     <div class="bg-[#1e3a5c]/90 border border-[#5B88B2] rounded-2xl shadow-2xl p-8 flex flex-col">
                         <h3 class="font-bold text-2xl text-[#FBF9E4] mb-4 flex items-center gap-2">
                             <svg class="w-6 h-6 text-[#5B88B2]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -134,7 +131,6 @@
                     @endif
 
                     @if($settings->show_friend_activity)
-                    <!-- Friends Activity -->
                     <div class="bg-[#1e3a5c]/90 border border-[#5B88B2] rounded-2xl shadow-2xl p-8 flex flex-col">
                         <h3 class="font-bold text-2xl text-[#FBF9E4] mb-4 flex items-center gap-2">
                             <svg class="w-6 h-6 text-[#5B88B2]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -170,7 +166,6 @@
             @endif
         </div>
 
-        <!-- Settings Modal -->
         <div id="settings-modal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
             <div class="bg-[#FBF9E4] rounded-2xl shadow-2xl p-8 w-full max-w-md border border-[#5B88B2]">
                 <h2 class="text-xl font-bold mb-4 text-[#122C4F]">Customize Homepage</h2>
@@ -204,7 +199,6 @@
         </div>
     </section>
     <script>
-        // Simple modal close on ESC
         document.addEventListener('keydown', function(e) {
             if(e.key === "Escape") {
                 document.getElementById('settings-modal').classList.add('hidden');

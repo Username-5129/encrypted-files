@@ -1,5 +1,5 @@
 <div class="relative bg-[#1e3a5c]/90 border border-[#5B88B2] rounded-2xl shadow-xl p-6 flex flex-col h-full overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-200 group">
-    <!-- Decorative blue accent -->
+ 
     <div class="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-[#5B88B2]/40 to-transparent rounded-full blur-2xl opacity-60 pointer-events-none"></div>
 
     <div class="flex items-center gap-3 mb-4">

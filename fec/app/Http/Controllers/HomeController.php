@@ -20,16 +20,13 @@ class HomeController extends Controller
         $user = Auth::user();
         $settings = $user->homepageSetting ?? HomepageSetting::firstOrCreate(['user_id' => $user->id]);
 
-        // Fetch recent files for the user
         $recentFiles = File::where('owner_id', $user->id)
             ->latest()
             ->take(5)
             ->get();
 
-        // Fetch friends (assuming you have a friends() relationship)
         $friends = $user->friends ?? collect();
 
-        // Fetch recent activity from friends 
         $friendActivity = collect();
         if ($friends->isNotEmpty()) {
             $friendActivity = File::whereIn('owner_id', $friends->pluck('id'))

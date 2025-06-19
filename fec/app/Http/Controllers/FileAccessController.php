@@ -20,7 +20,6 @@ class FileAccessController extends Controller
     {
         $file = File::findOrFail($id);
 
-        // Check if the user is authorized
         if (!$this->authorizeUser ($file)) {
             return redirect()->back()->with('error', 'You do not have permission to manage access for this file.');
         }
@@ -39,7 +38,6 @@ class FileAccessController extends Controller
     {
         $file = File::findOrFail($fileId);
 
-        // Check if the user is authorized
         if (!$this->authorizeUser ($file)) {
             return redirect()->back()->with('error', 'You do not have permission to grant access to this file.');
         }
@@ -65,7 +63,7 @@ class FileAccessController extends Controller
         $fileAccess = FileAccess::where('file_id', $fileId)->where('user_id', $userId)->firstOrFail();
         $file = File::findOrFail($fileId);
 
-        // Check if the user is authorized
+
         if (!$this->authorizeUser ($file)) {
             return redirect()->back()->with('error', 'You do not have permission to toggle editing for this file.');
         }
@@ -88,7 +86,7 @@ class FileAccessController extends Controller
         $fileAccess = FileAccess::where('file_id', $fileId)->where('user_id', $userId)->firstOrFail();
         $file = File::findOrFail($fileId);
 
-        // Check if the user is authorized
+
         if (!$this->authorizeUser ($file)) {
             return redirect()->back()->with('error', 'You do not have permission to remove access for this file.');
         }
