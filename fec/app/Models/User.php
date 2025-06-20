@@ -69,6 +69,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(FileAccess::class, 'user_id');
     }
+    public function language()
+    {
+        return $this->belongsTo(Language::class);
+    }
+
 
     public function isAdmin() {
         return $this->role === 'admin';

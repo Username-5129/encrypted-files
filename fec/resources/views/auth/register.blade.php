@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot name="title">
-        Register
+        {{ __('register.register') }}
     </x-slot>
     <div class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#122C4F] via-[#1e3a5c] to-black py-12 px-4 overflow-hidden">
         <svg class="absolute top-0 left-0 w-80 h-80 opacity-20 pointer-events-none" viewBox="0 0 200 200">
@@ -11,7 +11,7 @@
         </svg>
 
         <div class="w-full max-w-md bg-[#1e3a5c]/90 p-8 rounded-2xl shadow-2xl border border-[#5B88B2] relative">
-            <h1 class="mb-4 text-2xl font-bold text-[#FBF9E4] text-center">Register</h1>
+            <h1 class="mb-4 text-2xl font-bold text-[#FBF9E4] text-center">{{ __('register.register') }}</h1>
             @if ($errors->any())
                 <div class="bg-red-500 text-white p-4 rounded mb-4">
                     <ul>
@@ -24,7 +24,7 @@
             <form action="{{ route('register') }}" method="POST" class="space-y-5">
                 @csrf
                 <div class="mb-4">
-                    <label for="name" class="block text-sm font-medium text-[#FBF9E4]">Full Name</label>
+                    <label for="name" class="block text-sm font-medium text-[#FBF9E4]">{{ __('register.full_name') }}</label>
                     <input
                         type="text"
                         name="name"
@@ -37,7 +37,7 @@
                     @enderror
                 </div>
                 <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-[#FBF9E4]">Email address</label>
+                    <label for="email" class="block text-sm font-medium text-[#FBF9E4]">{{ __('register.email_address') }}</label>
                     <input
                         type="email"
                         name="email"
@@ -50,7 +50,7 @@
                     @enderror
                 </div>
                 <div class="mb-4">
-                    <label for="password" class="block text-sm font-medium text-[#FBF9E4]">Password</label>
+                    <label for="password" class="block text-sm font-medium text-[#FBF9E4]">{{ __('register.password') }}</label>
                     <input
                         type="password"
                         name="password"
@@ -62,7 +62,7 @@
                     @enderror
                 </div>
                 <div class="mb-4">
-                    <label for="password_confirmation" class="block text-sm font-medium text-[#FBF9E4]">Password confirmation</label>
+                    <label for="password_confirmation" class="block text-sm font-medium text-[#FBF9E4]">{{ __('register.password_confirmation') }}</label>
                     <input
                         type="password"
                         name="password_confirmation"
@@ -73,7 +73,7 @@
                         <small class="text-red-400">{{ $message }}</small>
                     @enderror
                 </div>
-                <button type="submit" class="mt-4 w-full bg-[#5B88B2] text-[#FBF9E4] font-bold py-2 px-4 rounded-lg hover:bg-[#49709a] transition">Register</button>
+                <button type="submit" class="mt-4 w-full bg-[#5B88B2] text-[#FBF9E4] font-bold py-2 px-4 rounded-lg hover:bg-[#49709a] transition">{{ __('register.register') }}</button>
             </form>
         </div>
     </div>

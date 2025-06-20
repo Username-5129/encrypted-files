@@ -3,21 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
-use App\Services\LibreTranslateService;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Language;
+
 
 class LanguageController extends Controller
 {
-    public function switchLanguage(Request $request, string $locale): RedirectResponse
+
+    public function switchLang($lang)
     {
-        $availableLocales = ['en', 'lv'];
-        if (in_array($locale, $availableLocales)) {
-            App::setLocale($locale);
-            Session::put('applocale', $locale);
+        if (array_key_exists($lang, config('languages'))) {
+            Session::put('applocale', $lang);
+
+            if (Auth::check()) {
+                $language = Language::where('code', $lang)->first();
+                if ($language) {
+                    $user = Auth::user();
+                    $user->language_id = $language->id;
+                    $user->save();
+                } 
+            }
         }
-        $redirectTo = url()->previous() ?: route('home');
-        return redirect($redirectTo);
+
+        return redirect()->back();
     }
 }

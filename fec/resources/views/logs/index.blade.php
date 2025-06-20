@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot name="title">
-        Activity Logs
+        {{ __('logs.activity_logs') }}
     </x-slot>
 
     <div class="relative min-h-screen bg-gradient-to-br from-[#122C4F] via-[#1e3a5c] to-black py-12 px-4 overflow-hidden">
@@ -25,22 +25,22 @@
 
                 @if ($logs->isEmpty())
                     <div class="bg-[#FBF9E4] text-[#122C4F] px-4 py-3 rounded shadow text-center mb-6">
-                        No logs available.
+                        {{ __('logs.no_logs_available') }}
                     </div>
                 @else
                     <div class="overflow-x-auto rounded-lg shadow mb-6">
                         <table class="min-w-full bg-[#122C4F] text-[#FBF9E4] rounded-lg">
                             <thead>
                                 <tr class="bg-[#5B88B2]/80 text-[#FBF9E4]">
-                                    <th class="px-4 py-3 text-left">File ID</th>
-                                    <th class="px-4 py-3 text-left">User ID</th>
+                                    <th class="px-4 py-3 text-left">{{ __('logs.file_id') }}</th>
+                                    <th class="px-4 py-3 text-left">{{ __('logs.user_id') }}</th>
                                     @auth
                                     @if (Auth::user()->isAdmin())
-                                        <th class="px-4 py-3 text-left">IP Address</th>
+                                        <th class="px-4 py-3 text-left">{{ __('logs.ip_address') }}</th>
                                     @endif
                                     @endauth
-                                    <th class="px-4 py-3 text-left">Action</th>
-                                    <th class="px-4 py-3 text-left">Created At</th>
+                                    <th class="px-4 py-3 text-left">{{ __('logs.action') }}</th>
+                                    <th class="px-4 py-3 text-left">{{ __('logs.created_at') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -65,9 +65,9 @@
                     </div>
                 @endif
 
-                <a href="{{ route('home') }}"
+                <a href="{{ route('file.show', $file->id) }}"
                    class="inline-block mt-4 bg-[#5B88B2] text-[#FBF9E4] px-6 py-2 rounded-xl shadow hover:bg-[#49709a] transition font-semibold">
-                    Back to Dashboard
+                    {{ __('logs.back_to_file') }}
                 </a>
             </div>
         </div>

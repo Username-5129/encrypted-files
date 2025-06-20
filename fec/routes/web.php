@@ -65,3 +65,5 @@ Route::get('/api/current-time', function () {
         'time' => now()->format('H:i:s'),
     ]);
 });
+
+Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => '\App\Http\Controllers\LanguageController@switchLang']);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -41,8 +42,13 @@ class AuthController extends Controller
 
         if (Auth::attempt($request->only('email', 'password'))) {
             $request->session()->regenerate();
+            $user = Auth::user();
+            if ($user->language) {
+                Session::put('applocale', $user->language->code);
+            }
             return redirect()->intended(route('home'))->with('success', 'Login successful!');
         }
+
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->withInput();

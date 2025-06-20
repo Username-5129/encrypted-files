@@ -200,12 +200,23 @@ class EncryptedFilesController extends Controller
         $tempFilePath = tempnam(sys_get_temp_dir(), 'decfile_');
         file_put_contents($tempFilePath, $decrypted);
 
-        Logs::create([
+         if (auth()->check()) {
+            Logs::create([
             'file_id' => $file->id,
             'user_id' => Auth::user()->id,
             'ip_address' => request()->ip(),
             'action' => 'file download',
         ]);
+        } else {
+            Logs::create([
+            'file_id' => $file->id,
+            'user_id' => null,
+            'ip_address' => request()->ip(),
+            'action' => 'file download',
+        ]);
+        }
+
+
 
         return response()->download($tempFilePath, $file->filename)->deleteFileAfterSend(true);
     }

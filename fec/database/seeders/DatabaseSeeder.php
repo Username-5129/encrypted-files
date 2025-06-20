@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Friend;
+use App\Models\Language;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -50,5 +51,15 @@ class DatabaseSeeder extends Seeder
                'friend_id' => 2,
            ]);
        }
+
+       Language::create([
+           'name' => 'English',
+           'code' => 'en',
+       ]);
+
+       Language::create([
+           'name' => 'Latviešu',
+           'code' => 'lv',
+       ]);
    }
 }
